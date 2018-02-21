@@ -13,10 +13,6 @@ find_library( wthttp wthttp )
 
 add_executable( slurm_gui
   main.cpp
-  auth.cpp 
-  model/Session.cpp 
-  model/User.cpp 
-  SlurmOverviewWidget.cpp
 )
 
 target_link_libraries( slurm_gui wt wthttp wtdbosqlite3 wtdbo ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_SIGNALS_LIBRARY} )
