@@ -52,6 +52,7 @@ void Session::configureAuth()
   myAuthService.setEmailVerificationEnabled(true);
   myAuthService.setEmailVerificationRequired(true);
 
+
   std::unique_ptr<Wt::Auth::PasswordVerifier> verifier =
     std::make_unique<Wt::Auth::PasswordVerifier>();
   verifier->addHashFunction(std::make_unique<Wt::Auth::BCryptHashFunction>(7));

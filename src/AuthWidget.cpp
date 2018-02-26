@@ -12,7 +12,8 @@ AuthWidget::AuthWidget() :
 {
   auto authWidget = this->addWidget( make_unique<Wt::Auth::AuthWidget>(Session::auth(), session_.users(), session_.login()) );
   authWidget->model()->addPasswordAuth(&Session::passwordAuth());
-  authWidget->setRegistrationEnabled(true);
+  //change to true to enable registration
+  authWidget->setRegistrationEnabled(false);
   authWidget->processEnvironment();
 }
 
