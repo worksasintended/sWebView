@@ -15,6 +15,8 @@ find_library( wthttp wthttp )
 add_executable( slurm_gui
   main.cpp
   AuthWidget.cpp
+  InfoWidget.cpp
+  RootApplication.cpp
   model/Session.cpp 
   model/User.cpp
 )
