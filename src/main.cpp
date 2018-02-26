@@ -10,7 +10,7 @@
 #include <Wt/WStackedWidget.h>
 #include <string>
 
-
+#include "AuthWidget.hpp"
 
 using namespace Wt;
 using namespace std;
@@ -37,7 +37,11 @@ class RootApplication : public Wt::WApplication{
       auto leftMenu = Wt::cpp14::make_unique<Wt::WMenu>(contentsStack);
       auto leftMenu_ = navigation->addMenu(std::move(leftMenu));
       leftMenu_->addItem("Information", make_unique<Wt::WText>("Information part, visible without authentification"));
-      leftMenu_->addItem("Administration", make_unique<Wt::WText>("Administration part, authentification required"));
+      leftMenu_->addItem("Administration", make_unique<AuthWidget>());
+    }
+
+    virtual ~RootApplication() {
+
     }
 
 };
