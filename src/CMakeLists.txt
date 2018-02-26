@@ -17,6 +17,7 @@ add_executable( slurm_gui
   AuthWidget.cpp
   InfoWidget.cpp
   RootApplication.cpp
+  AdminWidget.cpp
   model/Session.cpp 
   model/User.cpp
 )

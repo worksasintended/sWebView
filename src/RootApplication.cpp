@@ -45,7 +45,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto authWidget = authWidget_up.get();
       leftMenu_->addItem("Administration", std::move(authWidget_up));
       logoutButton = rightMenu_->addItem("Logout", make_unique<Wt::WPushButton>());
-      hideLogoutButton();
+      //hideLogoutButton();
       logoutButton->clicked().connect(
           [=](){
             authWidget->logout();
