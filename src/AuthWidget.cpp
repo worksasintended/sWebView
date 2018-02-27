@@ -10,6 +10,8 @@
 #include "AuthWidget.hpp"
 #include "AdminWidget.hpp"
 
+#include "Observable.hpp"
+
 using namespace std;
 using namespace Wt;
 
@@ -36,16 +38,21 @@ AuthWidget::~AuthWidget() {
 
 
 void AuthWidget::authEvent(){
-    if (session_.login().loggedIn()) {
-      AuthWidget::adminPanel->show();
-      AuthWidget::authWidget->hide();
-    }
-    else{
-      AuthWidget::adminPanel->hide();
-      AuthWidget::authWidget->show();
-    }
+  if (session_.login().loggedIn()) {
+    AuthWidget::adminPanel->show();
+    AuthWidget::authWidget->hide();
+  }
+  else{
+    AuthWidget::adminPanel->hide();
+    AuthWidget::authWidget->show();
+  }
+  this->notify_observers();
 }
 
 void AuthWidget::logout(){
   session_.login().logout();
+}
+
+bool AuthWidget::isLoggedIn() {
+  return session_.login().loggedIn();
 }

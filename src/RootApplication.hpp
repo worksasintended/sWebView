@@ -5,15 +5,17 @@
 #include <Wt/WNavigationBar.h>
 #include <Wt/WMenu.h>
 
+#include "Observable.hpp"
+#include "AuthWidget.hpp"
 
 
-class RootApplication : public Wt::WApplication{
+class RootApplication : public Wt::WApplication, public Observer{
   public:
     RootApplication(const Wt::WEnvironment& env);
     virtual ~RootApplication();
 
-    void hideLogoutButton();
-    void showLogoutButton();
-
+    virtual void update() override;
+  private:
+    AuthWidget* authWidget = nullptr;
     Wt::WMenuItem* logoutButton=nullptr;
 };

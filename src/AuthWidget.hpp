@@ -8,15 +8,18 @@
 #include "RootApplication.hpp"
 #include "model/Session.h"
 
+#include "Observable.hpp"
+
 using namespace std;
 using namespace Wt;
 
-class AuthWidget : public Wt::WContainerWidget{
+class AuthWidget : public Wt::WContainerWidget, public Observable{
 public:
     AuthWidget (); 
     virtual ~AuthWidget ();
     void logout();
     Wt::WContainerWidget* adminPanel;
+    bool isLoggedIn();
 private:
   void authEvent();
   Wt::Auth::AuthWidget* authWidget=nullptr;

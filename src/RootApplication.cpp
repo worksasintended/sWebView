@@ -10,7 +10,6 @@
 #include <Wt/WPushButton.h>
 #include <string>
 
-#include "AuthWidget.hpp"
 #include "InfoWidget.hpp"
 #include "RootApplication.hpp"
 using namespace Wt;
@@ -42,15 +41,17 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
 
       //Login-logout-button
       auto authWidget_up = make_unique<AuthWidget>();
-      auto authWidget = authWidget_up.get();
+      authWidget = authWidget_up.get();
+      
+      authWidget->add_observer( this );
       leftMenu_->addItem("Administration", std::move(authWidget_up));
       logoutButton = rightMenu_->addItem("Logout", make_unique<Wt::WPushButton>());
-      //hideLogoutButton();
       logoutButton->clicked().connect(
           [=](){
             authWidget->logout();
           }
       );
+      logoutButton->hide();
 }
 
 
@@ -58,9 +59,11 @@ RootApplication::~RootApplication() {
 
 }
 
-void RootApplication::hideLogoutButton(){
-  logoutButton->hide();
-}
-void RootApplication::showLogoutButton(){
-  logoutButton->show();
+
+void RootApplication::update() {
+  if ( authWidget->isLoggedIn() ) {
+    logoutButton->show();
+  }else{
+    logoutButton->hide();
+  }
 }
