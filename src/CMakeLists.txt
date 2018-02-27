@@ -22,5 +22,5 @@ add_executable( slurm_gui
   model/User.cpp
 )
 
-target_link_libraries( slurm_gui wt wthttp wtdbosqlite3 wtdbo ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_SIGNALS_LIBRARY} )
+target_link_libraries( slurm_gui wt wthttp wtdbosqlite3 wtdbo slurm ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_SIGNALS_LIBRARY} )
 
