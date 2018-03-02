@@ -14,8 +14,9 @@ struct PartitionsInfoData : public Observable {
         //clean up memory
         free(info);
       }
-      time_t now = time(NULL) - 60*60*24; // does not work with something lower than this ????? but why 
-      int ret = slurm_load_partitions(now, &info, SHOW_FEDERATION);
+      time_t last_update = 0;
+      int ret = slurm_load_partitions(last_update, &info, SHOW_FEDERATION);
+      std::cout << ret << std::endl;
     }
 
     auto number_of_partitions(){
