@@ -1,0 +1,37 @@
+[
+{
+  "directory": "/sWebView/src",
+  "command": "/usr/sbin/c++     -std=c++17 -g   -o CMakeFiles/slurm_gui.dir/main.cpp.o -c /sWebView/src/main.cpp",
+  "file": "/sWebView/src/main.cpp"
+},
+{
+  "directory": "/sWebView/src",
+  "command": "/usr/sbin/c++     -std=c++17 -g   -o CMakeFiles/slurm_gui.dir/AuthWidget.cpp.o -c /sWebView/src/AuthWidget.cpp",
+  "file": "/sWebView/src/AuthWidget.cpp"
+},
+{
+  "directory": "/sWebView/src",
+  "command": "/usr/sbin/c++     -std=c++17 -g   -o CMakeFiles/slurm_gui.dir/InfoWidget.cpp.o -c /sWebView/src/InfoWidget.cpp",
+  "file": "/sWebView/src/InfoWidget.cpp"
+},
+{
+  "directory": "/sWebView/src",
+  "command": "/usr/sbin/c++     -std=c++17 -g   -o CMakeFiles/slurm_gui.dir/RootApplication.cpp.o -c /sWebView/src/RootApplication.cpp",
+  "file": "/sWebView/src/RootApplication.cpp"
+},
+{
+  "directory": "/sWebView/src",
+  "command": "/usr/sbin/c++     -std=c++17 -g   -o CMakeFiles/slurm_gui.dir/AdminWidget.cpp.o -c /sWebView/src/AdminWidget.cpp",
+  "file": "/sWebView/src/AdminWidget.cpp"
+},
+{
+  "directory": "/sWebView/src",
+  "command": "/usr/sbin/c++     -std=c++17 -g   -o CMakeFiles/slurm_gui.dir/model/Session.cpp.o -c /sWebView/src/model/Session.cpp",
+  "file": "/sWebView/src/model/Session.cpp"
+},
+{
+  "directory": "/sWebView/src",
+  "command": "/usr/sbin/c++     -std=c++17 -g   -o CMakeFiles/slurm_gui.dir/model/User.cpp.o -c /sWebView/src/model/User.cpp",
+  "file": "/sWebView/src/model/User.cpp"
+}
+]

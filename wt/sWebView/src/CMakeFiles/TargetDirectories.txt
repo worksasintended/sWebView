@@ -1,0 +1,3 @@
+/sWebView/src/CMakeFiles/rebuild_cache.dir
+/sWebView/src/CMakeFiles/slurm_gui.dir
+/sWebView/src/CMakeFiles/edit_cache.dir

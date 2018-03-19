@@ -1,0 +1,17 @@
+version: '3'
+services:
+  ernie:
+    image: giovtorres/docker-centos7-slurm:latest
+    hostname: ernie
+    command: tail -f /dev/null
+  wt:
+    build: ./wt
+    hostname: wt
+    depends_on:
+     - ernie  
+    volumes:
+    - ./wt/sWebView:/sWebView   
+    ports:
+    - "8080:8080"
+    links:
+       - ernie
