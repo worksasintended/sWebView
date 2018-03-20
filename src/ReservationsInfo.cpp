@@ -63,4 +63,6 @@ void ReservationsInfo::create_reservation(){
   desc_msg->accounts = (char*)malloc(sizeof(char)*200);
   sprintf( desc_msg->accounts, "root");
   desc_msg->end_time = std::chrono::system_clock::to_time_t(std::chrono::high_resolution_clock::now() + std::chrono::hours(24));
+
+  slurm_create_reservation(desc_msg);
 }
