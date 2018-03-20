@@ -9,9 +9,9 @@ using namespace Wt;
 InfoWidget::InfoWidget(){
 
   // first create something we can track with the update function
-  partitions_info_data = new PartitionsInfoData();
-  partitions_info_data->add_observer(this);
-  partitions_info_data->update_data();
+  partitions_info = new PartitionsInfo();
+  partitions_info->add_observer(this);
+  partitions_info->update_data();
 
   // call the routine that draws all elements to this widget
   update();
@@ -29,13 +29,12 @@ void InfoWidget::update(){
   auto update = this->addWidget(make_unique<WPushButton>("update") );
   update->clicked().connect(
     [=](){
-      partitions_info_data->update_data();
+      partitions_info->update_data();
     }
   );
 
-  // now add some elements that display the information from the infered slurm data
-  for (int i = 0; i < partitions_info_data->number_of_partitions(); ++i){
-    this->addWidget( make_unique<WText>(partitions_info_data->get_partition_name(i) ) );
+  for ( auto& part : *partitions_info){
+    this->addWidget( make_unique<WText>(part.get_name() ) );
   }
 
 }
