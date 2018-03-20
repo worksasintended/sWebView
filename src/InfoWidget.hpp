@@ -12,7 +12,7 @@ struct PartitionsInfoData : public Observable {
     void update_data(){
       if ( info ) {
         //clean up memory
-        free(info);
+        slurm_free_partition_info_msg(info);
       }
       time_t last_update = 0;
       int ret = slurm_load_partitions(last_update, &info, SHOW_FEDERATION);
