@@ -42,6 +42,13 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto rightMenu_ = navigation->addMenu(std::move(rightMenu), Wt::AlignmentFlag::Right);
       leftMenu_->addItem("Information", make_unique<InfoWidget>(partitions_info));
 
+      // refresh button
+      auto refreshButton=rightMenu_->addItem("Refresh", make_unique<Wt::WPushButton>());
+      refreshButton->clicked().connect(
+	      [=](){
+	         partitions_info->notify_observers();
+	      }
+      );
       //Login-logout-button
       auto authWidget_up = make_unique<AuthWidget>();
       authWidget = authWidget_up.get();
