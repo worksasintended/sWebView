@@ -16,3 +16,7 @@ std::string NodeInfo::get_name(){
 size_t NodeInfo::get_cpus(){
   return info->cpus;
 }
+
+size_t NodeInfo::get_cores(){
+  return info->cores;
+}

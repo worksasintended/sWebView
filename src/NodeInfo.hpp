@@ -12,6 +12,7 @@ struct NodeInfo {
 
     std::string get_name();
     size_t get_cpus();
+    size_t get_cores();
 
   private:
     node_info_t* info = nullptr;

@@ -22,6 +22,8 @@ add_executable( slurm_gui
   PartitionInfo.cpp
   NodesInfo.cpp
   NodeInfo.cpp
+  ReservationsInfo.cpp
+  ReservationInfo.cpp
   model/Session.cpp 
   model/User.cpp
 )
