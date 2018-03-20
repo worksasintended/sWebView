@@ -1,7 +1,7 @@
 #!/bin/bash
 SLURMCONFIG="/etc/slurm-llnl/slurm.conf"
 MUNGEKEY="/etc/munge/munge.key"
-sWebView="`pwd`/sWebView"
+sWebView="`pwd`/../../..../../../sWebView"
 docker run \
 	--rm \
     --add-host mintuser-VirtualBox:10.0.2.15 \
