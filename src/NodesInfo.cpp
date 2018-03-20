@@ -16,7 +16,7 @@ void NodesInfo::update_data(){
   for( int i = 0 ; i < this->number_of_nodes() ; i++ ) {
     node_info.emplace_back( &info->node_array[i] );
   }
-  std::cout << ret << std::endl;
+  this->notify_observers();
 }
 
 size_t NodesInfo::number_of_nodes(){

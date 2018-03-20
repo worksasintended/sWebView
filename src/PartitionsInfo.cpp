@@ -15,7 +15,7 @@ void PartitionsInfo::update_data(){
   for( int i = 0 ; i < this->number_of_partitions() ; i++ ) {
     partition_info.emplace_back( &info->partition_array[i] );
   }
-  std::cout << ret << std::endl;
+  this->notify_observers();
 }
 
 size_t PartitionsInfo::number_of_partitions(){

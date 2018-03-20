@@ -16,6 +16,7 @@ void ReservationsInfo::update_data(){
   for( int i = 0 ; i < this->number_of_reservations() ; i++ ) {
     reservation_info.emplace_back( &info->reservation_array[i] );
   }
+  this->notify_observers();
 }
 
 size_t ReservationsInfo::number_of_reservations(){
