@@ -6,10 +6,10 @@ using namespace std;
 using namespace Wt;
 
 
-InfoWidget::InfoWidget(){
+InfoWidget::InfoWidget( std::shared_ptr<PartitionsInfo> _pinfo ){
 
   // first create something we can track with the update function
-  partitions_info = new PartitionsInfo();
+  partitions_info = _pinfo;
   partitions_info->add_observer(this);
   partitions_info->update_data();
 

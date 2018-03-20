@@ -1,3 +1,4 @@
+#pragma once
 
 #include "Observable.hpp"
 #include "PartitionInfo.hpp"

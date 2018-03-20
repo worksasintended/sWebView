@@ -11,6 +11,7 @@
 #include <string>
 
 #include "InfoWidget.hpp"
+#include "PartitionsInfo.hpp"
 #include "RootApplication.hpp"
 using namespace Wt;
 using namespace std;
@@ -28,6 +29,8 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto container = layout->addWidget( make_unique<WContainerWidget>(), Wt::LayoutPosition::North );
       auto image = container->addWidget( make_unique<Wt::WImage>(Wt::WLink("banner.png")) );
 
+      auto partitions_info = make_shared<PartitionsInfo>();
+
       //navigation bar
       Wt::WNavigationBar *navigation = container->addWidget(make_unique<Wt::WNavigationBar>());
       navigation->setResponsive(true);
@@ -37,7 +40,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto leftMenu_ = navigation->addMenu(std::move(leftMenu));
       auto rightMenu = Wt::cpp14::make_unique<Wt::WMenu>();
       auto rightMenu_ = navigation->addMenu(std::move(rightMenu), Wt::AlignmentFlag::Right);
-      leftMenu_->addItem("Information", make_unique<InfoWidget>());
+      leftMenu_->addItem("Information", make_unique<InfoWidget>(partitions_info));
 
       //Login-logout-button
       auto authWidget_up = make_unique<AuthWidget>();

@@ -20,6 +20,8 @@ add_executable( slurm_gui
   AdminWidget.cpp
   PartitionsInfo.cpp
   PartitionInfo.cpp
+  NodesInfo.cpp
+  NodeInfo.cpp
   model/Session.cpp 
   model/User.cpp
 )
