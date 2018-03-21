@@ -18,6 +18,7 @@ struct ReservationsInfo : public Observable {
     ReservationInfo& get_reservation( size_t idx );
 
     void create_reservation();
+    void update_reservation(std::string name);
 
     auto begin(){
       return reservation_info.begin();

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <chrono>
 #include <memory>
+#include <cstring>
 
 using namespace std;
 
@@ -27,13 +28,18 @@ size_t ReservationsInfo::number_of_reservations(){
   return info->record_count;
 }
 
+// one needs to throw an exeption if this is an out of bounds access
 ReservationInfo& ReservationsInfo::get_reservation( size_t idx ) {
+  if ( idx < 0 && idx >= reservation_info.size() ){
+    throw std::out_of_range("reservation_info");
+  }
   return reservation_info[idx];
 }
 
 
 void ReservationsInfo::create_reservation(){
-  unique_ptr<resv_desc_msg_t> desc_msg( new resv_desc_msg_t );
+  unique_ptr<resv_desc_msg_t> desc_msg( new resv_desc_msg_t ); // we own the struct so we need to destroy it
+
   slurm_init_resv_desc_msg( desc_msg.get() ); // initialize with defaults
 #if 0
   	char *accounts;		/* names of accounts permitted to use */
@@ -60,9 +66,29 @@ void ReservationsInfo::create_reservation(){
   // TODO this is just an example implementation 
   // all other values have to be obtained from the user interface
   desc_msg->start_time = std::chrono::system_clock::to_time_t(std::chrono::high_resolution_clock::now());
-  desc_msg->accounts = (char*)malloc(sizeof(char)*200);
-  sprintf( desc_msg->accounts, "root");
+  desc_msg->accounts = strdup("root");
   desc_msg->end_time = std::chrono::system_clock::to_time_t(std::chrono::high_resolution_clock::now() + std::chrono::hours(24));
 
-  slurm_create_reservation(desc_msg);
+  slurm_create_reservation(desc_msg.get());
+  // changed the underlying data model so an update is needed 
+  this->update_data();
 }
+
+void ReservationsInfo::update_reservation(std::string name){
+  unique_ptr<resv_desc_msg_t> desc_msg( new resv_desc_msg_t ); // we own the struct so we need to destroy it
+  slurm_init_resv_desc_msg( desc_msg.get() ); // initialize with defaults
+
+  desc_msg->name = strdup(name.c_str());
+
+  slurm_update_reservation(desc_msg.get());
+  this->update_data();
+}
+
+
+
+
+
+
+
+
+
