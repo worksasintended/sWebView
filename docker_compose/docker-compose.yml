@@ -4,9 +4,14 @@ services:
     image: giovtorres/docker-centos7-slurm:latest
     hostname: ernie
     command: tail -f /dev/null
+    expose: 
+      - "6817"
+      - "6818"
+      - "6819"
   wt:
     build: ./wt
     hostname: wt
+    entrypoint: tail -f /dev/null
     depends_on:
      - ernie  
     volumes:

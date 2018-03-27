@@ -24,6 +24,8 @@ RUN sudo -u yaourt yaourt -S --noconfirm munge
 RUN sudo -u yaourt yaourt -S --noconfirm slurm-llnl
 COPY slurm.conf /etc/slurm-llnl/slurm.conf
 COPY munge.key /etc/munge/munge.key
+RUN chown munge /etc/munge/munge.key && \
+    chmod 600 /etc/munge/munge.key  
 ADD init.sh /init.sh
 EXPOSE 8080
 CMD ["/init.sh"]

@@ -125,6 +125,7 @@ RUN set -x \
 COPY slurm.conf /etc/slurm/slurm.conf
 COPY slurmdbd.conf /etc/slurm/slurmdbd.conf
 COPY supervisord.conf /etc/
+RUN rm -f /etc/munge/munge.key || true
 COPY munge.key /etc/munge/munge.key
 VOLUME ["/var/lib/mysql", "/var/lib/slurmd", "/var/spool/slurmd", "/var/log/slurm"]
 

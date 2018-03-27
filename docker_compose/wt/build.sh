@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t "local/swebview" .
+docker build -t "local/swebview_new" .

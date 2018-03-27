@@ -52,4 +52,6 @@ chown slurm:slurm /var/spool/slurmd /var/run/slurmd /var/lib/slurmd /var/log/slu
 echo "- Starting all Slurm processes under supervisord"
 /usr/bin/supervisord --configuration /etc/supervisord.conf
 
+cp -f /tmp/munge.key /etc/munge/munge.key
+
 exec "$@"
