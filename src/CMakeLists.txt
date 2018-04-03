@@ -25,7 +25,10 @@ add_executable( slurm_gui
   ReservationsInfo.cpp
   ReservationInfo.cpp
   UsersInfo.cpp 
+  UsersInfoWidget.cpp 
   UserInfo.cpp
+  AccountsInfo.cpp 
+  AccountInfo.cpp 
   SlurmDB.cpp
   model/Session.cpp 
   model/User.cpp

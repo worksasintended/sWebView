@@ -14,6 +14,8 @@
 #include "PartitionsInfo.hpp"
 #include "RootApplication.hpp"
 #include "UsersInfo.hpp"
+#include "UsersInfoWidget.hpp"
+#include "AccountsInfo.hpp"
 using namespace Wt;
 using namespace std;
 
@@ -34,6 +36,9 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       SlurmDB slurm_db;
       slurm_db.connect();
       auto users_info = make_shared<UsersInfo>(slurm_db);
+      auto accounts_info = make_shared<AccountsInfo>(slurm_db);
+
+      container->setOverflow( Wt::Overflow::Scroll );
 
       //navigation bar
       Wt::WNavigationBar *navigation = container->addWidget(make_unique<Wt::WNavigationBar>());
@@ -45,6 +50,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto rightMenu = Wt::cpp14::make_unique<Wt::WMenu>();
       auto rightMenu_ = navigation->addMenu(std::move(rightMenu), Wt::AlignmentFlag::Right);
       leftMenu_->addItem("Information", make_unique<InfoWidget>(partitions_info));
+      leftMenu_->addItem("User Management", make_unique<UsersInfoWidget>(users_info,accounts_info));
 
       // refresh button
       auto refreshButton=rightMenu_->addItem("Refresh", make_unique<Wt::WPushButton>());
@@ -52,6 +58,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
 	      [=](){
 	         partitions_info->update_data();
                  users_info->update_data();
+                 accounts_info->update_data();
 	      }
       );
       //Login-logout-button
