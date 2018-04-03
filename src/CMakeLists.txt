@@ -24,9 +24,12 @@ add_executable( slurm_gui
   NodeInfo.cpp
   ReservationsInfo.cpp
   ReservationInfo.cpp
+  UsersInfo.cpp 
+  UserInfo.cpp
+  SlurmDB.cpp
   model/Session.cpp 
   model/User.cpp
 )
 
-target_link_libraries( slurm_gui wt wthttp wtdbosqlite3 wtdbo slurm ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_SIGNALS_LIBRARY} )
+target_link_libraries( slurm_gui wt wthttp wtdbosqlite3 wtdbo slurm slurmdb ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_SIGNALS_LIBRARY} )
 

@@ -13,6 +13,7 @@
 #include "InfoWidget.hpp"
 #include "PartitionsInfo.hpp"
 #include "RootApplication.hpp"
+#include "UsersInfo.hpp"
 using namespace Wt;
 using namespace std;
 
@@ -30,6 +31,9 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto image = container->addWidget( make_unique<Wt::WImage>(Wt::WLink("banner.png")) );
 
       auto partitions_info = make_shared<PartitionsInfo>();
+      SlurmDB slurm_db;
+      slurm_db.connect();
+      auto users_info = make_shared<UsersInfo>(slurm_db);
 
       //navigation bar
       Wt::WNavigationBar *navigation = container->addWidget(make_unique<Wt::WNavigationBar>());
@@ -47,6 +51,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       refreshButton->clicked().connect(
 	      [=](){
 	         partitions_info->update_data();
+                 users_info->update_data();
 	      }
       );
       //Login-logout-button
