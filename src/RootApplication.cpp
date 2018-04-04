@@ -56,9 +56,13 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto refreshButton=rightMenu_->addItem("Refresh", make_unique<Wt::WPushButton>());
       refreshButton->clicked().connect(
 	      [=](){
+                 std::cout << "refreshing partitions_info" << std::endl;
 	         partitions_info->update_data();
-                 users_info->update_data();
+                 std::cout << "refreshing accounts_info" << std::endl;
                  accounts_info->update_data();
+                 std::cout << "refreshing users_info" << std::endl;
+                 users_info->update_data();
+                 std::cout << "done refreshing" << std::endl;
 	      }
       );
       //Login-logout-button

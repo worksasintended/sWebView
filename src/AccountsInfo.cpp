@@ -1,6 +1,7 @@
 
 
 #include "AccountsInfo.hpp"
+#include "SlurmInternal.hpp"
 
 #include <slurm/slurm.h>
 #include <slurm/slurmdb.h>
@@ -9,18 +10,32 @@
 #include <memory>
 #include <cstring>
 
+
 using namespace std;
-
-
 void AccountsInfo::update_data(){
 
-  slurmdb_account_cond_t conditions;
-  // zero the data block otherwise pointers dangle 
-  memset(&conditions, 0, sizeof(slurmdb_user_cond_t));
+  slurmdb_account_cond_t* conditions = 
+    (slurmdb_account_cond_t*)xmalloc(sizeof(slurmdb_account_cond_t));
 
-  slurmdb_connection_commit(slurm_db.get_connection(), 0);
-  // TODO this line leaks 
-  List accounts = slurmdb_accounts_get(slurm_db.get_connection(), &conditions);
+  conditions->assoc_cond = (slurmdb_assoc_cond_t*)xmalloc(sizeof(slurmdb_assoc_cond_t));
+  conditions->with_assocs = 0;
+  conditions->assoc_cond->cluster_list = slurm_list_create(slurm_destroy_char);
+
+  // TODO to SlurmDB
+  auto ret = slurmdb_connection_commit(slurm_db.get_connection(), 0);
+  if ( ret != SLURM_SUCCESS ) {
+    std::cout << "could not commit to slurmdb" << std::endl;
+  }
+
+  static List accounts;
+  static bool initialized = false;
+
+  if ( initialized ) {
+    slurm_list_destroy(accounts);
+  }
+
+  accounts = slurmdb_accounts_get(slurm_db.get_connection(), conditions);
+  initialized = true;
 
   auto it = slurm_list_iterator_create(accounts);
 
@@ -30,8 +45,10 @@ void AccountsInfo::update_data(){
   }
 
   slurm_list_iterator_destroy(it);
+  slurm_list_destroy(accounts);
 
   this->notify_observers();
+  std::cout << "done" << __PRETTY_FUNCTION__ << std::endl;
 }
 
 size_t AccountsInfo::number_of_accounts(){
@@ -50,4 +67,14 @@ void AccountsInfo::print() {
   for( auto& element : *this ){
     std::cout << element.get_name() << std::endl;
   }
+}
+
+
+std::vector<std::string> 
+AccountsInfo::get_account_names(){
+  std::vector<std::string> names;
+  for( auto& account : *this ){
+    names.push_back( account.get_name() ) ;
+  }
+  return names;
 }

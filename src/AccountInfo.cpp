@@ -11,6 +11,8 @@ AccountInfo::AccountInfo( void* _info ) {
 }
 
 std::string AccountInfo::get_name(){
+  if ( info == nullptr ) return "no info item";
+  if ( ((slurmdb_account_rec_t*)info)->name == nullptr ) return "no name";
   return ((slurmdb_account_rec_t*)info)->name;
 }
 

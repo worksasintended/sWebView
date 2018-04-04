@@ -23,6 +23,8 @@ struct AccountsInfo : public Observable {
     size_t number_of_accounts();
     AccountInfo& get_account( size_t idx );
 
+    std::vector<std::string> get_account_names();
+
     void print();
 
     auto begin(){
