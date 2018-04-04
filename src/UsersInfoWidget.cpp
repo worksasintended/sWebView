@@ -15,6 +15,7 @@ UsersInfoWidget::UsersInfoWidget ( std::shared_ptr<UsersInfo> _users_info,
   users_info = _users_info;
   accounts_info = _accounts_info;
   users_info->add_observer(this);
+  accounts_info->add_observer(this);
 
   this->update();
 }
@@ -23,11 +24,24 @@ UsersInfoWidget::~UsersInfoWidget()  {
 
 }
 
-std::vector<std::string> UsersInfoWidget::get_accounts(){
-  
+void make_error_dialog( WDialog* dialog, std::string text ){
+  auto con = dialog->contents()->addWidget(make_unique<WContainerWidget>());
+
+  con->addWidget( make_unique<WText>( text ) );
+
+  auto ok_button = con->addWidget(make_unique<WPushButton>( "ok" ) );
+  ok_button->clicked().connect([=] {
+    dialog->accept();
+  });
+
 }
 
-void UsersInfoWidget::make_move_dialog(WDialog* dialog, std::vector<std::string> account_names, std::string name, UserInfo& user_info ){
+void UsersInfoWidget::make_move_dialog(
+    WDialog* dialog, 
+    std::vector<std::string> account_names, 
+    std::string name, 
+    UserInfo& user_info 
+){
   auto con = dialog->contents()->addWidget(make_unique<WContainerWidget>());
 
   auto cb = con->addWidget(make_unique<Wt::WComboBox>());
@@ -42,8 +56,21 @@ void UsersInfoWidget::make_move_dialog(WDialog* dialog, std::vector<std::string>
   });
   auto ok_button = con->addWidget(make_unique<WPushButton>( "ok" ) );
   ok_button->clicked().connect([=] {
-    users_info->set_default_account( user_info, cb->valueText().toUTF8() );
-    dialog->accept();
+    try{
+      users_info->set_default_account( user_info, cb->valueText().toUTF8() );
+    }catch ( std::invalid_argument& ia ) {
+      auto edialog = this->addChild(
+          make_unique<Wt::WDialog>("Error")
+      );
+      make_error_dialog( edialog, ia.what() );
+      edialog->show();
+      edialog->finished().connect(
+        [=](){
+          this->removeChild( edialog );
+          dialog->accept();
+        }
+      );
+    }
   });
 }
 
@@ -56,16 +83,13 @@ void UsersInfoWidget::update(){
 
   // display them in raw format
   for( auto& user_info : *users_info ){
-    std::cout << "adding user item " << std::endl;
     auto node = make_unique<WTreeTableNode>(user_info.get_name()); 
-    std::cout << "done adding user item " << std::endl;
     auto user = node.get();
     root->addChildNode( std::move(node) );  
     int ctr = 1;
     auto button = make_unique<WPushButton>("move");
     auto move_button = button.get();
     user->setColumnWidget( ctr++ , std::move(button) );
-#if 0
     move_button->clicked().connect(
       [=,&user_info](){
         auto dialog = this->addChild(
@@ -85,7 +109,6 @@ void UsersInfoWidget::update(){
         );
       }
     );
-#endif
 
   }
   

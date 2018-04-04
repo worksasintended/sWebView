@@ -19,7 +19,6 @@ public:
     void update() override;
 
 private:
-    std::vector<std::string> get_accounts();
     void make_move_dialog(Wt::WDialog* dialog, 
         std::vector<std::string> account_names, 
         std::string name,

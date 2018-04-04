@@ -35,6 +35,7 @@ struct UsersInfo : public Observable {
     }
 
   private:
+
     std::vector<UserInfo> users_info; 
     SlurmDB& slurm_db;
 

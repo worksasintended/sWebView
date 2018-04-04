@@ -9,6 +9,8 @@ public:
 
     void connect();
     void disconnect();
+    void commit(bool c = true);
+    void update();
 
     auto get_connection(){
       return db_conn;

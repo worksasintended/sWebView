@@ -29,3 +29,14 @@ void
 SlurmDB::disconnect(){
   slurmdb_connection_close(&db_conn);
 }
+
+void SlurmDB::update() {
+  commit(false);
+}
+
+void SlurmDB::commit(bool commit) {
+  auto ret = slurmdb_connection_commit(db_conn, commit);
+  if ( ret != SLURM_SUCCESS ) {
+    std::cout << "could not commit to slurmdb" << std::endl;
+  }
+}

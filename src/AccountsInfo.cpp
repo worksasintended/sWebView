@@ -21,11 +21,7 @@ void AccountsInfo::update_data(){
   conditions->with_assocs = 0;
   conditions->assoc_cond->cluster_list = slurm_list_create(slurm_destroy_char);
 
-  // TODO to SlurmDB
-  auto ret = slurmdb_connection_commit(slurm_db.get_connection(), 0);
-  if ( ret != SLURM_SUCCESS ) {
-    std::cout << "could not commit to slurmdb" << std::endl;
-  }
+  slurm_db.update();
 
   static List accounts;
   static bool initialized = false;
@@ -45,7 +41,6 @@ void AccountsInfo::update_data(){
   }
 
   slurm_list_iterator_destroy(it);
-  slurm_list_destroy(accounts);
 
   this->notify_observers();
   std::cout << "done" << __PRETTY_FUNCTION__ << std::endl;
