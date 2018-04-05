@@ -1,6 +1,7 @@
 
 
 #include "UserInfo.hpp"
+#include "SlurmInternal.hpp"
 
 #include <slurm/slurm.h>
 #include <slurm/slurmdb.h>
@@ -11,6 +12,13 @@ using namespace std;
 
 UserInfo::UserInfo( void* _info ) {
   info = _info; 
+
+  auto user = (slurmdb_user_rec_t*)info;
+
+  for_all<slurmdb_assoc_rec_t>( user->assoc_list, [&]( auto assoc_rec ){ 
+    associations.emplace_back( assoc_rec );
+  });
+
 }
 
 std::string UserInfo::get_name() const{
@@ -19,11 +27,17 @@ std::string UserInfo::get_name() const{
   return ((slurmdb_user_rec_t*)info)->name;
 }
 
-#if 0
-void UserInfo::for_all_accounts( std::function<void(slurmdb_assoc_rec_t* )> ) {
-  
+void for_all_accounts( slurmdb_user_rec_t* user, std::function<void(slurmdb_assoc_rec_t* )> f) {
+
+  auto it = slurm_list_iterator_create(user->assoc_list);
+
+  while( auto element = slurm_list_next( it ) ){
+    auto association = (slurmdb_assoc_rec_t*)element;
+    f( association );
+  }
+
+  slurm_list_iterator_destroy( it ); 
 }
-#endif
 
 bool UserInfo::is_in_account( std::string account_name ) const{
   auto user = (slurmdb_user_rec_t*)info;
@@ -36,12 +50,9 @@ bool UserInfo::is_in_account( std::string account_name ) const{
 
   auto it = slurm_list_iterator_create(user->assoc_list);
 
-  std::cout << "searching for account name " << account_name << std::endl;
-
   while( auto element = slurm_list_next( it ) ){
     auto association = (slurmdb_assoc_rec_t*)element;
     std::string name = association->acct;
-    std::cout << "name: " << name << std::endl;
     if ( name == account_name ) {
       is = true;
       break;
@@ -53,3 +64,19 @@ bool UserInfo::is_in_account( std::string account_name ) const{
   return is;
 }
 
+
+std::vector<std::string> UserInfo::get_account_names() const {
+  std::vector<std::string> ret;
+  for_all_accounts( (slurmdb_user_rec_t*)info,  [&](slurmdb_assoc_rec_t* association){ 
+    ret.emplace_back( association->acct );
+  });
+  return ret;
+}
+
+double UserInfo::get_fairshare() {
+  double ret = 0;
+  for( auto& association : associations ){
+    ret += association.get_fairshare();
+  }
+  return ret;
+}

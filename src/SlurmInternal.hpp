@@ -1,6 +1,7 @@
 #pragma once
 
 #include <slurm/slurm.h>
+#include <functional>
 
 inline void slurm_destroy_char(void *object)
 {
@@ -25,4 +26,20 @@ inline int list_count(List l)
 
   slurm_list_iterator_destroy(it);
   return ctr;
+}
+
+ 
+template <typename T, typename U>
+inline void for_all( List l, U f ) {
+
+  if ( !l ) {
+    return;
+  }
+
+  auto it = slurm_list_iterator_create(l);
+  while ( auto element = slurm_list_next(it) ){
+    auto casted_element = (T*)element;
+    f( casted_element );
+  }
+  slurm_list_iterator_destroy(it);
 }

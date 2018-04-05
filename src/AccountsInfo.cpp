@@ -18,7 +18,10 @@ void AccountsInfo::update_data(){
     (slurmdb_account_cond_t*)xmalloc(sizeof(slurmdb_account_cond_t));
 
   conditions->assoc_cond = (slurmdb_assoc_cond_t*)xmalloc(sizeof(slurmdb_assoc_cond_t));
-  conditions->with_assocs = 0;
+  conditions->with_assocs = 1;
+  conditions->assoc_cond->with_usage = 1;
+  conditions->assoc_cond->usage_start = 0 ;
+  conditions->assoc_cond->usage_end = std::chrono::system_clock::to_time_t(std::chrono::high_resolution_clock::now());
   conditions->assoc_cond->cluster_list = slurm_list_create(slurm_destroy_char);
 
   slurm_db.update();

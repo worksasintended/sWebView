@@ -67,13 +67,13 @@ void UsersInfo::print() {
 
 // this should be the functionality of 
 // sacctmgr modify user where Names=user_info.get_name() set DefaultAccount=default_account
-//
-// TODO first one needs to check wether the user already is in the group one
-// wants to make default
 void UsersInfo::set_default_account( const UserInfo& user_info, std::string default_account ){
 
   if ( !user_info.is_in_account( default_account ) ) {
-    throw std::invalid_argument("Can not set to default account since the user does not list this account as one of his/her accounts");
+    throw std::invalid_argument(
+        "Can not set to default account "
+        "since the user does not list this account as one of his/her accounts"
+    );
   }
 
   slurmdb_user_cond_t* user_cond = 
@@ -116,10 +116,46 @@ void UsersInfo::set_default_account( const UserInfo& user_info, std::string defa
   slurm_db.commit();
 
   slurm_list_destroy(ret_list);
-  this->notify_observers();
+  update_data();
 }
 
+template <typename T>
+T* slurm_malloc() {
+  return (T*)xmalloc(sizeof(T));
+}
 
+// TODO check wether this is nessecary 
+void UsersInfo::add_to_account( const UserInfo& user_info, std::string account ){
+
+  auto user = slurm_malloc<slurmdb_user_rec_t>();
+  auto assoc = slurm_malloc<slurmdb_assoc_rec_t>();
+  slurmdb_init_assoc_rec(assoc, 0);
+  
+  assoc->acct = strdup(account.c_str());
+  assoc->user = strdup(user_info.get_name().c_str());
+
+  // TODO have to wrap cluster to get information from this
+  assoc->cluster = strdup("linux");
+
+  user->assoc_list = slurm_list_create(slurmdb_destroy_assoc_rec);
+  user->name = strdup(user_info.get_name().c_str());
+
+  slurm_list_append( user->assoc_list, assoc );
+
+  auto user_list = slurm_list_create(slurmdb_destroy_assoc_rec);
+  slurm_list_append( user_list, user );
+
+  int ret = slurmdb_users_add( slurm_db.get_connection(), user_list );
+
+  if ( ret != SLURM_SUCCESS ) {
+    throw "Unknown: could not add the user to the account";
+  }
+
+  // important !!!!!!! commit all things you changed in this transaction
+  slurm_db.commit();
+
+  update_data();
+}
 
 
 

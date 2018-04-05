@@ -11,11 +11,8 @@
 #include <string>
 
 #include "InfoWidget.hpp"
-#include "PartitionsInfo.hpp"
 #include "RootApplication.hpp"
-#include "UsersInfo.hpp"
 #include "UsersInfoWidget.hpp"
-#include "AccountsInfo.hpp"
 using namespace Wt;
 using namespace std;
 
@@ -32,11 +29,12 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto container = layout->addWidget( make_unique<WContainerWidget>(), Wt::LayoutPosition::North );
       auto image = container->addWidget( make_unique<Wt::WImage>(Wt::WLink("banner.png")) );
 
-      auto partitions_info = make_shared<PartitionsInfo>();
       SlurmDB slurm_db;
       slurm_db.connect();
-      auto users_info = make_shared<UsersInfo>(slurm_db);
-      auto accounts_info = make_shared<AccountsInfo>(slurm_db);
+
+      partitions_info = make_shared<PartitionsInfo>();
+      users_info = make_shared<UsersInfo>(slurm_db);
+      accounts_info = make_shared<AccountsInfo>(slurm_db);
 
       container->setOverflow( Wt::Overflow::Scroll );
 
@@ -56,13 +54,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto refreshButton=rightMenu_->addItem("Refresh", make_unique<Wt::WPushButton>());
       refreshButton->clicked().connect(
 	      [=](){
-                 std::cout << "refreshing partitions_info" << std::endl;
-	         partitions_info->update_data();
-                 std::cout << "refreshing accounts_info" << std::endl;
-                 accounts_info->update_data();
-                 std::cout << "refreshing users_info" << std::endl;
-                 users_info->update_data();
-                 std::cout << "done refreshing" << std::endl;
+                this->update_data();
 	      }
       );
       //Login-logout-button
@@ -78,6 +70,9 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
           }
       );
       logoutButton->hide();
+
+      // run data update at startup
+      //update_data();
 }
 
 
@@ -93,3 +88,10 @@ void RootApplication::update() {
     logoutButton->hide();
   }
 }
+
+void RootApplication::update_data() {
+  partitions_info->update_data();
+  accounts_info->update_data();
+  users_info->update_data(); 
+}
+

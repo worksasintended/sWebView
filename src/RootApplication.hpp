@@ -7,6 +7,9 @@
 
 #include "Observable.hpp"
 #include "AuthWidget.hpp"
+#include "PartitionsInfo.hpp"
+#include "UsersInfo.hpp"
+#include "AccountsInfo.hpp"
 
 
 class RootApplication : public Wt::WApplication, public Observer{
@@ -15,7 +18,13 @@ class RootApplication : public Wt::WApplication, public Observer{
     virtual ~RootApplication();
 
     virtual void update() override;
+
+    void update_data();
+
   private:
     AuthWidget* authWidget = nullptr;
     Wt::WMenuItem* logoutButton=nullptr;
+    std::shared_ptr<PartitionsInfo> partitions_info;
+    std::shared_ptr<UsersInfo> users_info;
+    std::shared_ptr<AccountsInfo> accounts_info;
 };

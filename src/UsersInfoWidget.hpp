@@ -21,7 +21,10 @@ public:
 private:
     void make_move_dialog(Wt::WDialog* dialog, 
         std::vector<std::string> account_names, 
-        std::string name,
+        UserInfo& user_info);
+
+    void make_add_dialog(Wt::WDialog* dialog, 
+        std::vector<std::string> account_names, 
         UserInfo& user_info);
 
     std::shared_ptr<UsersInfo> users_info;

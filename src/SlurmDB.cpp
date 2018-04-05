@@ -22,7 +22,6 @@ SlurmDB::connect(){
     exit(-1);
   }
   std::cout << "slurmdb connection established" << std::endl;
-  sleep(1);
 }
 
 void 

@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8) # http://www.cmake.org/cmake/help/cmake-2-8-
 project ("slurm_gui")
 
 SET (CMAKE_BUILD_TYPE DEBUG)
-SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread" )
+SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread -fsanitize=address" )
 SET( CMAKE_EXPORT_COMPILE_COMMANDS on )
 
 # Other Libraries
@@ -29,6 +29,7 @@ add_executable( slurm_gui
   UserInfo.cpp
   AccountsInfo.cpp 
   AccountInfo.cpp 
+  AssociationInfo.cpp 
   SlurmDB.cpp
   model/Session.cpp 
   model/User.cpp

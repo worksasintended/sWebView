@@ -24,6 +24,7 @@ UsersInfoWidget::~UsersInfoWidget()  {
 
 }
 
+// TODO move to utility funcitons header
 void make_error_dialog( WDialog* dialog, std::string text ){
   auto con = dialog->contents()->addWidget(make_unique<WContainerWidget>());
 
@@ -39,7 +40,6 @@ void make_error_dialog( WDialog* dialog, std::string text ){
 void UsersInfoWidget::make_move_dialog(
     WDialog* dialog, 
     std::vector<std::string> account_names, 
-    std::string name, 
     UserInfo& user_info 
 ){
   auto con = dialog->contents()->addWidget(make_unique<WContainerWidget>());
@@ -71,46 +71,147 @@ void UsersInfoWidget::make_move_dialog(
         }
       );
     }
+    dialog->accept();
+  });
+}
+
+void UsersInfoWidget::make_add_dialog(
+    WDialog* dialog, 
+    std::vector<std::string> account_names, 
+    UserInfo& user_info 
+){
+  auto con = dialog->contents()->addWidget(make_unique<WContainerWidget>());
+
+  auto cb = con->addWidget(make_unique<Wt::WComboBox>());
+
+  for( auto& account_name : account_names ){
+     cb->addItem( account_name );
+  }
+
+  auto cancel_button = con->addWidget(make_unique<WPushButton>( "cancel" ) );
+  cancel_button->clicked().connect([=] {
+    dialog->reject();
+  });
+  auto ok_button = con->addWidget(make_unique<WPushButton>( "ok" ) );
+  ok_button->clicked().connect([=] {
+    try{
+      users_info->add_to_account( user_info, cb->valueText().toUTF8() );
+    }catch ( std::invalid_argument& ia ) {
+      auto edialog = this->addChild(
+          make_unique<Wt::WDialog>("Error")
+      );
+      make_error_dialog( edialog, ia.what() );
+      edialog->show();
+      edialog->finished().connect(
+        [=](){
+          this->removeChild( edialog );
+          dialog->accept();
+        }
+      );
+    }
+    dialog->accept();
   });
 }
 
 void UsersInfoWidget::update(){
   this->clear();
 
+  // TODO someon has to change the style of this table 
+  // buttons made of icons or something like this
   auto tree_table = this->addWidget( make_unique<WTreeTable>() );
   tree_table->setTreeRoot( make_unique<WTreeTableNode>("root"), "Accounts" );
   auto root = tree_table->treeRoot();
 
-  // display them in raw format
-  for( auto& user_info : *users_info ){
-    auto node = make_unique<WTreeTableNode>(user_info.get_name()); 
-    auto user = node.get();
-    root->addChildNode( std::move(node) );  
+  std::map<std::string, WTreeTableNode*> accounts;
+
+  std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
+  // first create the accounts in the table
+  for( auto& account_info : *accounts_info ){
     int ctr = 1;
-    auto button = make_unique<WPushButton>("move");
-    auto move_button = button.get();
-    user->setColumnWidget( ctr++ , std::move(button) );
-    move_button->clicked().connect(
-      [=,&user_info](){
-        auto dialog = this->addChild(
-            make_unique<Wt::WDialog>("Move "s + user_info.get_name() + " to group")
-        );
-        make_move_dialog( 
-            dialog, 
-            accounts_info->get_account_names(), 
-            user_info.get_name(), 
-            user_info
-        );
-        dialog->show();
-        dialog->finished().connect(
-          [=](){
-            this->removeChild( dialog );
+    auto node = make_unique<WTreeTableNode>(account_info.get_name()); 
+    node->setColumnWidget( ctr++ , make_unique<WText>(to_string(account_info.get_fairshare())) );
+    accounts.emplace( account_info.get_name(), node.get() );
+    root->addChildNode(std::move(node));
+  }
+  std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
+  
+  // second add the users to their accounts
+  for( auto& user_info : *users_info ){
+    for( auto& user_account : user_info.get_account_names() ) {
+      WTreeTableNode* account = nullptr;
+      auto search = accounts.find(user_account);
+      if(search != accounts.end()) {
+          account = search->second;
+      } else {
+          continue;
+      }
+
+      auto node = make_unique<WTreeTableNode>(user_info.get_name()); 
+      auto user = node.get();
+      account->addChildNode( std::move(node) );  
+      int ctr = 1;
+
+#if 0
+      std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
+      auto fs = user_info.get_fairshare();
+      std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
+
+      user->setColumnWidget( ctr++ , make_unique<WText>(to_string(fs)) );
+#endif
+
+      {
+        auto button = make_unique<WPushButton>("add");
+        auto add_button = button.get();
+        user->setColumnWidget( ctr++ , std::move(button) );
+        add_button->clicked().connect(
+          [=,&user_info](){
+            auto dialog = this->addChild(
+                make_unique<Wt::WDialog>("Add "s + user_info.get_name() + " to account")
+            );
+            make_add_dialog( 
+                dialog, 
+                accounts_info->get_account_names(), 
+                user_info
+            );
+            dialog->show();
+            dialog->finished().connect(
+              [=](){
+                this->removeChild( dialog );
+              }
+            );
           }
         );
       }
-    );
+
+      {
+        auto button = make_unique<WPushButton>("default");
+        auto move_button = button.get();
+        user->setColumnWidget( ctr++ , std::move(button) );
+        move_button->clicked().connect(
+          [=,&user_info](){
+            auto dialog = this->addChild(
+                make_unique<Wt::WDialog>("Set "s + user_info.get_name() + " default account")
+            );
+            make_move_dialog( 
+                dialog, 
+                user_info.get_account_names(), 
+                user_info
+            );
+            dialog->show();
+            dialog->finished().connect(
+              [=](){
+                this->removeChild( dialog );
+              }
+            );
+          }
+        );
+      }
+
+    }
 
   }
+
+  root->expand();
   
 
 }
