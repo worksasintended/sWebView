@@ -11,8 +11,16 @@ inline void slurm_destroy_char(void *object)
 
 extern "C"{
   extern void *slurm_xmalloc(size_t s, bool clear, const char *, int, const char *);
+  extern char *slurm_xstrdup(const char *str);
 }
 #define xmalloc(s) slurm_xmalloc( s, true, __FILE__, __LINE__, __func__ )
+#define xstrdup(s) slurm_xstrdup( s )
+
+// convinience function for c++ to use xmalloc 
+template <typename T>
+T* slurm_malloc() {
+  return (T*)xmalloc(sizeof(T));
+}
 
 
 inline int list_count(List l)

@@ -19,9 +19,9 @@ void AccountsInfo::update_data(){
 
   conditions->assoc_cond = (slurmdb_assoc_cond_t*)xmalloc(sizeof(slurmdb_assoc_cond_t));
   conditions->with_assocs = 1;
-  conditions->assoc_cond->with_usage = 1;
-  conditions->assoc_cond->usage_start = 0 ;
-  conditions->assoc_cond->usage_end = std::chrono::system_clock::to_time_t(std::chrono::high_resolution_clock::now());
+  //conditions->assoc_cond->with_usage = 1;
+  //conditions->assoc_cond->usage_start = 0 ;
+  //conditions->assoc_cond->usage_end = std::chrono::system_clock::to_time_t(std::chrono::high_resolution_clock::now());
   conditions->assoc_cond->cluster_list = slurm_list_create(slurm_destroy_char);
 
   slurm_db.update();
@@ -76,3 +76,63 @@ AccountsInfo::get_account_names(){
   }
   return names;
 }
+
+void AccountsInfo::create_account( std::string name, std::string description, std::string cluster ) {
+  std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
+  auto account = slurm_malloc<slurmdb_account_rec_t>();
+  
+  // TODO use xstrdup for this
+  account->name = xstrdup( name.c_str() );
+  account->description = xstrdup( description.c_str() );
+  account->organization = xstrdup(name.c_str());
+
+  auto assoc = slurm_malloc<slurmdb_assoc_rec_t>();
+  slurmdb_init_assoc_rec(assoc, 0);
+
+  assoc->acct = xstrdup( name.c_str() );
+  assoc->cluster = xstrdup(cluster.c_str());
+
+  account->assoc_list = slurm_list_create(slurmdb_destroy_assoc_rec);
+  slurm_list_append( account->assoc_list, assoc );
+
+  auto account_list = slurm_list_create(slurmdb_destroy_account_rec);
+  slurm_list_append( account_list, account );
+
+
+  int ret = slurmdb_accounts_add(slurm_db.get_connection(), account_list);
+
+  if ( ret != SLURM_SUCCESS ) {
+    throw "Unknown: could create account";
+  }
+
+  std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
+  slurm_db.commit();
+  this->update_data();
+}
+
+
+
+void AccountsInfo::delete_account( const AccountInfo& account ){
+
+  auto account_cond = slurm_malloc<slurmdb_account_cond_t>();
+  
+  account_cond->assoc_cond = slurm_malloc<slurmdb_assoc_cond_t>();
+
+  account_cond->assoc_cond->acct_list = slurm_list_create(slurm_destroy_char);
+  slurm_list_append( account_cond->assoc_cond->acct_list , xstrdup(account.get_name().c_str() ));
+
+  slurmdb_accounts_remove(slurm_db.get_connection(), account_cond );
+
+  slurm_db.commit();
+  this->update_data();
+}
+
+
+
+
+
+
+
+
+
+

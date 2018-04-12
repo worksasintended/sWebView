@@ -7,6 +7,8 @@
 #include <Wt/WDialog.h>
 #include <Wt/WComboBox.h>
 
+#include "StandardDialogs.hpp"
+
 using namespace std;
 using namespace Wt;
 
@@ -21,19 +23,6 @@ UsersInfoWidget::UsersInfoWidget ( std::shared_ptr<UsersInfo> _users_info,
 }
 
 UsersInfoWidget::~UsersInfoWidget()  {
-
-}
-
-// TODO move to utility funcitons header
-void make_error_dialog( WDialog* dialog, std::string text ){
-  auto con = dialog->contents()->addWidget(make_unique<WContainerWidget>());
-
-  con->addWidget( make_unique<WText>( text ) );
-
-  auto ok_button = con->addWidget(make_unique<WPushButton>( "ok" ) );
-  ok_button->clicked().connect([=] {
-    dialog->accept();
-  });
 
 }
 
@@ -116,7 +105,7 @@ void UsersInfoWidget::make_add_dialog(
 void UsersInfoWidget::update(){
   this->clear();
 
-  // TODO someon has to change the style of this table 
+  // TODO someone has to change the style of this table 
   // buttons made of icons or something like this
   auto tree_table = this->addWidget( make_unique<WTreeTable>() );
   tree_table->setTreeRoot( make_unique<WTreeTableNode>("root"), "Accounts" );
@@ -124,7 +113,6 @@ void UsersInfoWidget::update(){
 
   std::map<std::string, WTreeTableNode*> accounts;
 
-  std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
   // first create the accounts in the table
   for( auto& account_info : *accounts_info ){
     int ctr = 1;
@@ -133,7 +121,6 @@ void UsersInfoWidget::update(){
     accounts.emplace( account_info.get_name(), node.get() );
     root->addChildNode(std::move(node));
   }
-  std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
   
   // second add the users to their accounts
   for( auto& user_info : *users_info ){

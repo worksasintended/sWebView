@@ -13,6 +13,7 @@
 #include "InfoWidget.hpp"
 #include "RootApplication.hpp"
 #include "UsersInfoWidget.hpp"
+#include "AccountsInfoWidget.hpp"
 using namespace Wt;
 using namespace std;
 
@@ -35,6 +36,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       partitions_info = make_shared<PartitionsInfo>();
       users_info = make_shared<UsersInfo>(slurm_db);
       accounts_info = make_shared<AccountsInfo>(slurm_db);
+      clusters_info = make_shared<ClustersInfo>(slurm_db);
 
       container->setOverflow( Wt::Overflow::Scroll );
 
@@ -49,6 +51,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto rightMenu_ = navigation->addMenu(std::move(rightMenu), Wt::AlignmentFlag::Right);
       leftMenu_->addItem("Information", make_unique<InfoWidget>(partitions_info));
       leftMenu_->addItem("User Management", make_unique<UsersInfoWidget>(users_info,accounts_info));
+      leftMenu_->addItem("Account Management", make_unique<AccountsInfoWidget>(accounts_info, clusters_info));
 
       // refresh button
       auto refreshButton=rightMenu_->addItem("Refresh", make_unique<Wt::WPushButton>());
@@ -93,5 +96,6 @@ void RootApplication::update_data() {
   partitions_info->update_data();
   accounts_info->update_data();
   users_info->update_data(); 
+  clusters_info->update_data(); 
 }
 

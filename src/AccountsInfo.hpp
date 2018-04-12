@@ -22,6 +22,8 @@ struct AccountsInfo : public Observable {
     void update_data();
     size_t number_of_accounts();
     AccountInfo& get_account( size_t idx );
+    void create_account( std::string name, std::string description, std::string cluster );
+    void delete_account( const AccountInfo& account );
 
     std::vector<std::string> get_account_names();
 

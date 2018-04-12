@@ -1,6 +1,7 @@
 
 
 #include "ReservationsInfo.hpp"
+#include "SlurmInternal.hpp"
 
 #include <slurm/slurm.h>
 #include <iostream>
@@ -66,7 +67,7 @@ void ReservationsInfo::create_reservation(){
   // TODO this is just an example implementation 
   // all other values have to be obtained from the user interface
   desc_msg->start_time = std::chrono::system_clock::to_time_t(std::chrono::high_resolution_clock::now());
-  desc_msg->accounts = strdup("root");
+  desc_msg->accounts = xstrdup("root");
   desc_msg->end_time = std::chrono::system_clock::to_time_t(std::chrono::high_resolution_clock::now() + std::chrono::hours(24));
 
   slurm_create_reservation(desc_msg.get());
@@ -78,7 +79,7 @@ void ReservationsInfo::update_reservation(std::string name){
   unique_ptr<resv_desc_msg_t> desc_msg( new resv_desc_msg_t ); // we own the struct so we need to destroy it
   slurm_init_resv_desc_msg( desc_msg.get() ); // initialize with defaults
 
-  desc_msg->name = strdup(name.c_str());
+  desc_msg->name = xstrdup(name.c_str());
 
   slurm_update_reservation(desc_msg.get());
   this->update_data();

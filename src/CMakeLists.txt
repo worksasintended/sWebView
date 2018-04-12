@@ -27,8 +27,11 @@ add_executable( slurm_gui
   UsersInfo.cpp 
   UsersInfoWidget.cpp 
   UserInfo.cpp
-  AccountsInfo.cpp 
+  ClusterInfo.cpp
+  ClustersInfo.cpp
   AccountInfo.cpp 
+  AccountsInfo.cpp 
+  AccountsInfoWidget.cpp 
   AssociationInfo.cpp 
   SlurmDB.cpp
   model/Session.cpp 

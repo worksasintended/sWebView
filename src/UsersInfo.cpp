@@ -91,12 +91,12 @@ void UsersInfo::set_default_account( const UserInfo& user_info, std::string defa
   user_cond->assoc_cond->user_list = slurm_list_create(slurm_destroy_char);
 
   // specify the name
-  slurm_list_append( user_cond->assoc_cond->user_list, strdup(user_info.get_name().c_str()) );
+  slurm_list_append( user_cond->assoc_cond->user_list, xstrdup(user_info.get_name().c_str()) );
 
   slurmdb_user_rec_t* user = (slurmdb_user_rec_t*)xmalloc(sizeof(slurmdb_user_rec_t));
   // specify the account to go to 
   // you already need to have this in the list of accounts you are in
-  user->default_acct = strdup(default_account.c_str());
+  user->default_acct = xstrdup(default_account.c_str());
 
   List ret_list = slurmdb_users_modify(slurm_db.get_connection(), user_cond, user);
 
@@ -119,10 +119,6 @@ void UsersInfo::set_default_account( const UserInfo& user_info, std::string defa
   update_data();
 }
 
-template <typename T>
-T* slurm_malloc() {
-  return (T*)xmalloc(sizeof(T));
-}
 
 // TODO check wether this is nessecary 
 void UsersInfo::add_to_account( const UserInfo& user_info, std::string account ){
@@ -131,18 +127,18 @@ void UsersInfo::add_to_account( const UserInfo& user_info, std::string account )
   auto assoc = slurm_malloc<slurmdb_assoc_rec_t>();
   slurmdb_init_assoc_rec(assoc, 0);
   
-  assoc->acct = strdup(account.c_str());
-  assoc->user = strdup(user_info.get_name().c_str());
+  assoc->acct = xstrdup(account.c_str());
+  assoc->user = xstrdup(user_info.get_name().c_str());
 
   // TODO have to wrap cluster to get information from this
-  assoc->cluster = strdup("linux");
+  assoc->cluster = xstrdup("linux");
 
   user->assoc_list = slurm_list_create(slurmdb_destroy_assoc_rec);
-  user->name = strdup(user_info.get_name().c_str());
+  user->name = xstrdup(user_info.get_name().c_str());
 
   slurm_list_append( user->assoc_list, assoc );
 
-  auto user_list = slurm_list_create(slurmdb_destroy_assoc_rec);
+  auto user_list = slurm_list_create(slurmdb_destroy_user_rec);
   slurm_list_append( user_list, user );
 
   int ret = slurmdb_users_add( slurm_db.get_connection(), user_list );
