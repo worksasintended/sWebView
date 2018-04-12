@@ -33,6 +33,8 @@ add_executable( slurm_gui
   AccountsInfo.cpp 
   AccountsInfoWidget.cpp 
   AssociationInfo.cpp 
+  JobsInfo.cpp
+  JobInfo.cpp
   SlurmDB.cpp
   model/Session.cpp 
   model/User.cpp

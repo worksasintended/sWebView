@@ -14,6 +14,7 @@
 #include "RootApplication.hpp"
 #include "UsersInfoWidget.hpp"
 #include "AccountsInfoWidget.hpp"
+
 using namespace Wt;
 using namespace std;
 
@@ -30,10 +31,13 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto container = layout->addWidget( make_unique<WContainerWidget>(), Wt::LayoutPosition::North );
       auto image = container->addWidget( make_unique<Wt::WImage>(Wt::WLink("banner.png")) );
 
+
+      partitions_info = make_shared<PartitionsInfo>();
+      jobs_info = make_shared<JobsInfo>();
+
       SlurmDB slurm_db;
       slurm_db.connect();
 
-      partitions_info = make_shared<PartitionsInfo>();
       users_info = make_shared<UsersInfo>(slurm_db);
       accounts_info = make_shared<AccountsInfo>(slurm_db);
       clusters_info = make_shared<ClustersInfo>(slurm_db);
@@ -97,5 +101,6 @@ void RootApplication::update_data() {
   accounts_info->update_data();
   users_info->update_data(); 
   clusters_info->update_data(); 
+  jobs_info->update_data(); 
 }
 
