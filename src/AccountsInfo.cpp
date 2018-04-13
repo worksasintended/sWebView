@@ -81,7 +81,6 @@ void AccountsInfo::create_account( std::string name, std::string description, st
   std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
   auto account = slurm_malloc<slurmdb_account_rec_t>();
   
-  // TODO use xstrdup for this
   account->name = xstrdup( name.c_str() );
   account->description = xstrdup( description.c_str() );
   account->organization = xstrdup(name.c_str());

@@ -11,7 +11,11 @@ struct JobInfo {
 
     JobInfo( slurm_job_info_t* );
 
-    std::string get_name();
+    std::string get_description();
+    std::string get_user_name();
+    uint32_t get_id();
+    std::string get_state();
+    std::string get_node_list();
 
   private:
     slurm_job_info_t* info = nullptr;

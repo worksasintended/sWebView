@@ -20,6 +20,7 @@ struct JobsInfo : public Observable {
     void update_data();
     size_t number_of_jobs();
     JobInfo& get_job( size_t idx );
+    void cancel_job( const JobInfo& );
 
     void print();
 

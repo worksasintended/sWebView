@@ -38,3 +38,7 @@ JobInfo& JobsInfo::get_job( size_t idx ) {
 }
 
 
+void JobsInfo::cancel_job( const JobInfo& job_info ) {
+  throw "not implemented"; 
+}
+

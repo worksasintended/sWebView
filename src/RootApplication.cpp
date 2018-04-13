@@ -14,6 +14,7 @@
 #include "RootApplication.hpp"
 #include "UsersInfoWidget.hpp"
 #include "AccountsInfoWidget.hpp"
+#include "JobsInfoWidget.hpp"
 
 using namespace Wt;
 using namespace std;
@@ -56,6 +57,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       leftMenu_->addItem("Information", make_unique<InfoWidget>(partitions_info));
       leftMenu_->addItem("User Management", make_unique<UsersInfoWidget>(users_info,accounts_info));
       leftMenu_->addItem("Account Management", make_unique<AccountsInfoWidget>(accounts_info, clusters_info));
+      leftMenu_->addItem("Job Management", make_unique<JobsInfoWidget>(jobs_info));
 
       // refresh button
       auto refreshButton=rightMenu_->addItem("Refresh", make_unique<Wt::WPushButton>());
