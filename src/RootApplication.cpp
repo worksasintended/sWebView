@@ -73,6 +73,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       authWidget->add_observer( this );
       leftMenu_->addItem("Administration", std::move(authWidget_up));
       logoutButton = rightMenu_->addItem("Logout", make_unique<Wt::WPushButton>());
+      logoutButton->setCheckable(false); //"checked" and "unchecked" useless for a logout button, no logout possible if not logged-in
       logoutButton->clicked().connect(
           [=](){
             authWidget->logout();
