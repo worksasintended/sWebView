@@ -46,7 +46,6 @@ void AccountsInfo::update_data(){
   slurm_list_iterator_destroy(it);
 
   this->notify_observers();
-  std::cout << "done" << __PRETTY_FUNCTION__ << std::endl;
 }
 
 size_t AccountsInfo::number_of_accounts(){
@@ -78,7 +77,6 @@ AccountsInfo::get_account_names(){
 }
 
 void AccountsInfo::create_account( std::string name, std::string description, std::string cluster ) {
-  std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
   auto account = slurm_malloc<slurmdb_account_rec_t>();
   
   account->name = xstrdup( name.c_str() );
@@ -104,7 +102,6 @@ void AccountsInfo::create_account( std::string name, std::string description, st
     throw "Unknown: could create account";
   }
 
-  std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
   slurm_db.commit();
   this->update_data();
 }

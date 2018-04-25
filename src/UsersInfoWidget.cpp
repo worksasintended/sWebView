@@ -138,14 +138,6 @@ void UsersInfoWidget::update(){
       account->addChildNode( std::move(node) );  
       int ctr = 1;
 
-#if 0
-      std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
-      auto fs = user_info.get_fairshare();
-      std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
-
-      user->setColumnWidget( ctr++ , make_unique<WText>(to_string(fs)) );
-#endif
-
       {
         auto button = make_unique<WPushButton>("add");
         auto add_button = button.get();

@@ -21,6 +21,10 @@ SlurmDB::connect(){
     std::cout << "error in slurm connection establish" << std::endl;
     exit(-1);
   }
+  if( db_conn == nullptr ) {
+    std::cout << "could not establish a connection to the slurmdbd. check your slurm.conf" << std::endl;
+    exit(-1);
+  }
   std::cout << "slurmdb connection established" << std::endl;
 }
 

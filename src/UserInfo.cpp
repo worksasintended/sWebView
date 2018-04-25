@@ -29,6 +29,11 @@ std::string UserInfo::get_name() const{
 
 void for_all_accounts( slurmdb_user_rec_t* user, std::function<void(slurmdb_assoc_rec_t* )> f) {
 
+  if ( !user->assoc_list ) {
+    std::cout << "user assoc list is empty -> proceeding" << std::endl;
+    return;
+  }
+
   auto it = slurm_list_iterator_create(user->assoc_list);
 
   while( auto element = slurm_list_next( it ) ){
