@@ -77,6 +77,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       logoutButton->clicked().connect(
           [=](){
             authWidget->logout();
+	    rightMenu_->select(-1);
           }
       );
       logoutButton->hide();
