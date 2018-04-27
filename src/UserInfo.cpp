@@ -9,43 +9,38 @@
 
 using namespace std;
 
+class UserInfo::Impl{
+  public:
+  slurmdb_user_rec_t* user;
+};
 
 UserInfo::UserInfo( void* _info ) {
-  info = _info; 
 
-  auto user = (slurmdb_user_rec_t*)info;
+  if ( _info == nullptr ) {
+    std::cout << "given info object is nullptr" << std::endl;
+    exit(EXIT_FAILURE);
+  }
 
-  for_all<slurmdb_assoc_rec_t>( user->assoc_list, [&]( auto assoc_rec ){ 
+  impl = new Impl;
+  impl->user = (slurmdb_user_rec_t*)_info;
+
+  for_all<slurmdb_assoc_rec_t>( impl->user->assoc_list, [&]( auto assoc_rec ){ 
     associations.emplace_back( assoc_rec );
   });
 
 }
 
-std::string UserInfo::get_name() const{
-  if ( info == nullptr ) return "no info item";
-  if ( ((slurmdb_user_rec_t*)info)->name == nullptr ) return "no name";
-  return ((slurmdb_user_rec_t*)info)->name;
+UserInfo::~UserInfo(){
+  delete impl;
 }
 
-void for_all_accounts( slurmdb_user_rec_t* user, std::function<void(slurmdb_assoc_rec_t* )> f) {
-
-  if ( !user->assoc_list ) {
-    std::cout << "user assoc list is empty -> proceeding" << std::endl;
-    return;
-  }
-
-  auto it = slurm_list_iterator_create(user->assoc_list);
-
-  while( auto element = slurm_list_next( it ) ){
-    auto association = (slurmdb_assoc_rec_t*)element;
-    f( association );
-  }
-
-  slurm_list_iterator_destroy( it ); 
+std::string UserInfo::get_name() const{
+  if ( impl->user->name == nullptr ) return "no name";
+  return impl->user->name;
 }
 
 bool UserInfo::is_in_account( std::string account_name ) const{
-  auto user = (slurmdb_user_rec_t*)info;
+  auto user = impl->user;;
   bool is = false;
 
   if ( !user->assoc_list ) {
@@ -72,7 +67,10 @@ bool UserInfo::is_in_account( std::string account_name ) const{
 
 std::vector<std::string> UserInfo::get_account_names() const {
   std::vector<std::string> ret;
-  for_all_accounts( (slurmdb_user_rec_t*)info,  [&](slurmdb_assoc_rec_t* association){ 
+
+  auto user = impl->user;
+
+  for_all<slurmdb_assoc_rec_t>( user->assoc_list, [&](slurmdb_assoc_rec_t* association){ 
     ret.emplace_back( association->acct );
   });
   return ret;

@@ -10,6 +10,7 @@ struct UserInfo {
   public:
 
     UserInfo( void* );
+    ~UserInfo();
 
     std::string get_name() const;
     bool is_in_account( std::string account_name ) const ;
@@ -17,8 +18,9 @@ struct UserInfo {
     double get_fairshare();
 
   private:
+    class Impl;
+    Impl* impl;
     // cant do this with slurmdb_user_rec_t since it produces a conflicting declaration
-    void* info = nullptr;
     std::vector<AssociationInfo> associations;
 };
 

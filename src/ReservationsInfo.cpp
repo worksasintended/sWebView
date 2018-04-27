@@ -19,14 +19,14 @@ void ReservationsInfo::update_data(){
   time_t last_update = 0;
   slurm_load_reservations(last_update, &info);
   reservation_info.clear();
-  for( int i = 0 ; i < this->number_of_reservations() ; i++ ) {
+  for( int i = 0 ; i < info->record_count ; i++ ) {
     reservation_info.emplace_back( &info->reservation_array[i] );
   }
   this->notify_observers();
 }
 
 size_t ReservationsInfo::number_of_reservations(){
-  return info->record_count;
+  return reservation_info.size();
 }
 
 // one needs to throw an exeption if this is an out of bounds access
