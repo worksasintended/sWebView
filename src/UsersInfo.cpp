@@ -37,6 +37,7 @@ void UsersInfo::update_data(){
   auto it = slurm_list_iterator_create(users);
 
   users_info.clear();
+  users_info.reserve(100);
   while ( auto element = slurm_list_next(it) ){
     users_info.emplace_back( element );
   }

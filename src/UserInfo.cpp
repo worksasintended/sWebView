@@ -9,8 +9,10 @@
 
 using namespace std;
 
-class UserInfo::Impl{
-  public:
+struct UserInfo::Impl{
+  Impl( slurmdb_user_rec_t* _user ){
+    user = _user;
+  }
   slurmdb_user_rec_t* user;
 };
 
@@ -21,8 +23,7 @@ UserInfo::UserInfo( void* _info ) {
     exit(EXIT_FAILURE);
   }
 
-  impl = new Impl;
-  impl->user = (slurmdb_user_rec_t*)_info;
+  impl = new UserInfo::Impl((slurmdb_user_rec_t*)_info);
 
   for_all<slurmdb_assoc_rec_t>( impl->user->assoc_list, [&]( auto assoc_rec ){ 
     associations.emplace_back( assoc_rec );
