@@ -15,6 +15,7 @@
 #include "UsersInfoWidget.hpp"
 #include "AccountsInfoWidget.hpp"
 #include "JobsInfoWidget.hpp"
+#include "ReservationsInfoWidget.hpp"
 
 using namespace Wt;
 using namespace std;
@@ -38,10 +39,10 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
 
       SlurmDB slurm_db;
       slurm_db.connect();
-
       users_info = make_shared<UsersInfo>(slurm_db);
       accounts_info = make_shared<AccountsInfo>(slurm_db);
       clusters_info = make_shared<ClustersInfo>(slurm_db);
+      reservations_info = make_shared<ReservationsInfo>();
 
       container->setOverflow( Wt::Overflow::Scroll );
 
@@ -58,13 +59,14 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       leftMenu_->addItem("User Management", make_unique<UsersInfoWidget>(users_info,accounts_info));
       leftMenu_->addItem("Account Management", make_unique<AccountsInfoWidget>(accounts_info, clusters_info));
       leftMenu_->addItem("Job Management", make_unique<JobsInfoWidget>(jobs_info));
+      leftMenu_->addItem("Reservation Management", make_unique<ReservationsInfoWidget>(reservations_info));
 
       // refresh button
       auto refreshButton=rightMenu_->addItem("Refresh", make_unique<Wt::WPushButton>());
       refreshButton->clicked().connect(
 	      [=](){
                 this->update_data();
-		rightMenu_->select(-1);
+		            rightMenu_->select(-1);
 	      }
       );
       //Login-logout-button
@@ -77,7 +79,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       logoutButton->clicked().connect(
           [=](){
             authWidget->logout();
-	    rightMenu_->select(-1);
+	          rightMenu_->select(-1);
           }
       );
       logoutButton->hide();
@@ -105,6 +107,7 @@ void RootApplication::update_data() {
   accounts_info->update_data();
   users_info->update_data(); 
   clusters_info->update_data(); 
-  jobs_info->update_data(); 
+  jobs_info->update_data();
+  reservations_info->update_data();
 }
 

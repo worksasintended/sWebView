@@ -37,6 +37,8 @@ add_executable( slurm_gui
   JobsInfo.cpp
   JobInfo.cpp
   SlurmDB.cpp
+  ReservationsInfoWidget.cpp
+  ReservationsInfoWidget.hpp
   model/Session.cpp 
   model/User.cpp
 )
