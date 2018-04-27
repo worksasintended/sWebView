@@ -12,6 +12,7 @@
 #include "AccountsInfo.hpp"
 #include "ClustersInfo.hpp"
 #include "JobsInfo.hpp"
+#include "ReservationsInfo.hpp"
 
 
 class RootApplication : public Wt::WApplication, public Observer{
@@ -31,4 +32,5 @@ class RootApplication : public Wt::WApplication, public Observer{
     std::shared_ptr<AccountsInfo> accounts_info;
     std::shared_ptr<ClustersInfo> clusters_info;
     std::shared_ptr<JobsInfo> jobs_info;
+    std::shared_ptr<ReservationsInfo> reservations_info;
 };

@@ -1,4 +1,5 @@
 
+#pragma once
 #include "Observable.hpp"
 #include "ReservationInfo.hpp"
 
