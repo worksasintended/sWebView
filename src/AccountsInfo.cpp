@@ -14,8 +14,7 @@
 using namespace std;
 void AccountsInfo::update_data(){
 
-  slurmdb_account_cond_t* conditions = 
-    (slurmdb_account_cond_t*)xmalloc(sizeof(slurmdb_account_cond_t));
+  auto conditions = slurm_malloc<slurmdb_account_cond_t>();
 
   conditions->assoc_cond = (slurmdb_assoc_cond_t*)xmalloc(sizeof(slurmdb_assoc_cond_t));
   conditions->with_assocs = 1;
@@ -99,7 +98,7 @@ void AccountsInfo::create_account( std::string name, std::string description, st
   int ret = slurmdb_accounts_add(slurm_db.get_connection(), account_list);
 
   if ( ret != SLURM_SUCCESS ) {
-    throw "Unknown: could create account";
+    throw std::string("Unknown: could not create account");
   }
 
   slurm_db.commit();

@@ -58,3 +58,5 @@ inline void make_confirm_dialog(
 
   dialog->show();
 }
+
+

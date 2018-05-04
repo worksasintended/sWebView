@@ -50,11 +50,17 @@ void AccountsInfoWidget::make_add_dialog( WDialog* dialog ){
   auto ok_button = con->addWidget(make_unique<WPushButton>( "ok" ) );
   ok_button->clicked().connect([=] {
     if ( name_le->text() != "" && description_le->text() != "" ) {
+      try{
       accounts_info->create_account(
           name_le->text().toUTF8(), 
           description_le->text().toUTF8(),
           "linux"
       );
+      }catch( std::string& e ) {
+        auto error_dialog = make_modal_dialog( dialog->parent() ); 
+        make_error_dialog( error_dialog, e );
+        error_dialog->show();
+      }
     }
     dialog->accept();
   });
@@ -62,7 +68,6 @@ void AccountsInfoWidget::make_add_dialog( WDialog* dialog ){
 
 void AccountsInfoWidget::update(){
   this->clear();
-    
 
   auto add_button =  this->addWidget( make_unique<WPushButton>("+") );
 
@@ -70,7 +75,11 @@ void AccountsInfoWidget::update(){
     [=](){
       auto dialog = make_modal_dialog(this);
       make_add_dialog( dialog );
-      dialog->show();
+      try{
+	dialog->show();
+      }catch( std::exception& e ) {
+	e.what();
+      }
     }
   );
 
@@ -103,7 +112,7 @@ void AccountsInfoWidget::update(){
           [=]() {
             accounts_info->delete_account(account_info);
           },
-          "do you really want to delete the account?"
+          "Do you really want to delete the account?"
           );
       }
     );
