@@ -12,7 +12,7 @@ typedef reserve_info_msg reserve_info_msg_t;
 //
 struct ReservationsInfo : public Observable {
   public:
-    void update_data();
+    virtual void update_data() override;
 
     size_t number_of_reservations();
    

@@ -19,7 +19,7 @@ struct AccountsInfo : public Observable {
   
     }
 
-    void update_data();
+    virtual void update_data() override;
     size_t number_of_accounts();
     AccountInfo& get_account( size_t idx );
     void create_account( std::string name, std::string description, std::string cluster );

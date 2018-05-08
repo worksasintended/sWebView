@@ -13,6 +13,7 @@
 #include "ClustersInfo.hpp"
 #include "JobsInfo.hpp"
 #include "ReservationsInfo.hpp"
+#include "SlurmDB.hpp"
 
 
 class RootApplication : public Wt::WApplication, public Observer{
@@ -23,14 +24,21 @@ class RootApplication : public Wt::WApplication, public Observer{
     virtual void update() override;
 
     void update_data();
+  
+    void add_updatable(Observable*);
+
+    SlurmDB& get_slurm_db();
 
   private:
     AuthWidget* authWidget = nullptr;
     Wt::WMenuItem* logoutButton=nullptr;
     std::shared_ptr<PartitionsInfo> partitions_info;
-    std::shared_ptr<UsersInfo> users_info;
-    std::shared_ptr<AccountsInfo> accounts_info;
-    std::shared_ptr<ClustersInfo> clusters_info;
-    std::shared_ptr<JobsInfo> jobs_info;
-    std::shared_ptr<ReservationsInfo> reservations_info;
+    std::vector<Observable*> observables;
+  
+//    std::shared_ptr<UsersInfo> users_info;
+//    std::shared_ptr<AccountsInfo> accounts_info;
+//    std::shared_ptr<ClustersInfo> clusters_info;
+//    std::shared_ptr<JobsInfo> jobs_info;
+//    std::shared_ptr<ReservationsInfo> reservations_info;
+    SlurmDB slurm_db;
 };

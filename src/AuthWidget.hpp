@@ -18,6 +18,7 @@ public:
     AuthWidget (); 
     virtual ~AuthWidget ();
     void logout();
+    virtual void update_data() override;
     Wt::WContainerWidget* adminPanel;
     bool isLoggedIn();
 private:

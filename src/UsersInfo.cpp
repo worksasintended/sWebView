@@ -16,6 +16,8 @@ using namespace std;
 
 void UsersInfo::update_data(){
 
+  std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
+
   slurmdb_user_cond_t* conditions = 
     (slurmdb_user_cond_t*)xmalloc(sizeof(slurmdb_user_cond_t));
 

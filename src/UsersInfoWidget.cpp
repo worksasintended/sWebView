@@ -103,6 +103,7 @@ void UsersInfoWidget::make_add_dialog(
 }
 
 void UsersInfoWidget::update(){
+  std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
   this->clear();
 
   // TODO someone has to change the style of this table 
@@ -192,5 +193,6 @@ void UsersInfoWidget::update(){
 
   root->expand();
   
+  std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
 
 }

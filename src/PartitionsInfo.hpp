@@ -12,7 +12,7 @@ typedef partition_info_msg partition_info_msg_t;
 //
 struct PartitionsInfo : public Observable {
   public:
-    void update_data();
+    virtual void update_data() override;
 
     size_t number_of_partitions();
    

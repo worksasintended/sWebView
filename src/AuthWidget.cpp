@@ -20,16 +20,24 @@ AuthWidget::AuthWidget() :
 {
   authWidget = this->addWidget( make_unique<Wt::Auth::AuthWidget>(Session::auth(), session_.users(), session_.login()) );
   authWidget->model()->addPasswordAuth(&Session::passwordAuth());
-  //change to true to enable registration
+  
+
+#if ENABLE_REGISTRATION
+  authWidget->setRegistrationEnabled(true);
+#else
   authWidget->setRegistrationEnabled(false);
+#endif
+
+
   authWidget->processEnvironment();
 
   session_.login().changed().connect(this, &AuthWidget::authEvent);
 
   adminPanel = this->addWidget( make_unique<AdminWidget>());
   adminPanel->hide();
-
-
+#if USE_DEBUG_BUILD  
+  session_.login().changed().emit();
+#endif
 }
 
 AuthWidget::~AuthWidget() {
@@ -38,7 +46,11 @@ AuthWidget::~AuthWidget() {
 
 
 void AuthWidget::authEvent(){
+#if USE_DEBUG_BUILD
+  if (true) {
+#else
   if (session_.login().loggedIn()) {
+#endif
     AuthWidget::adminPanel->show();
     AuthWidget::authWidget->hide();
   }
@@ -55,4 +67,8 @@ void AuthWidget::logout(){
 
 bool AuthWidget::isLoggedIn() {
   return session_.login().loggedIn();
+}
+
+void AuthWidget::update_data() {
+  
 }

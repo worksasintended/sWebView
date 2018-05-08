@@ -9,6 +9,7 @@ public:
 
 class Observable {
 public:
+  Observable();
   void notify_observers() {
     for( auto& observer : observers ){
       observer->update();
@@ -23,6 +24,7 @@ public:
     observers.erase(o);
   }
 
+  virtual void update_data();
 private:
   std::set<Observer*> observers;
 };

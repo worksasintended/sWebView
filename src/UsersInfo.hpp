@@ -19,7 +19,7 @@ struct UsersInfo : public Observable {
   
     }
 
-    void update_data();
+    virtual void update_data() override;
     size_t number_of_users();
     UserInfo& get_users( size_t idx );
     void set_default_account( const UserInfo& user_info, std::string default_account );

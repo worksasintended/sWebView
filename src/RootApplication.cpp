@@ -21,7 +21,9 @@ using namespace Wt;
 using namespace std;
 
 
-RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(env){
+RootApplication::RootApplication(const Wt::WEnvironment& env) : 
+  Wt::WApplication(env)
+{
 
       //basic layout
       auto bootstrapTheme = make_shared<Wt::WBootstrapTheme>();
@@ -35,17 +37,19 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
 
 
       partitions_info = make_shared<PartitionsInfo>();
-      jobs_info = make_shared<JobsInfo>();
+//      jobs_info = make_shared<JobsInfo>();
 
-      SlurmDB slurm_db;
+      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
       slurm_db.connect();
-      users_info = make_shared<UsersInfo>(slurm_db);
-      accounts_info = make_shared<AccountsInfo>(slurm_db);
-      clusters_info = make_shared<ClustersInfo>(slurm_db);
-      reservations_info = make_shared<ReservationsInfo>();
+      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
+//    users_info = make_shared<UsersInfo>(slurm_db);
+//   accounts_info = make_shared<AccountsInfo>(slurm_db);
+//      clusters_info = make_shared<ClustersInfo>(slurm_db);
+//      reservations_info = make_shared<ReservationsInfo>();
 
       container->setOverflow( Wt::Overflow::Scroll );
 
+      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
       //navigation bar
       Wt::WNavigationBar *navigation = container->addWidget(make_unique<Wt::WNavigationBar>());
       navigation->setResponsive(true);
@@ -56,22 +60,24 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       auto rightMenu = Wt::cpp14::make_unique<Wt::WMenu>();
       auto rightMenu_ = navigation->addMenu(std::move(rightMenu), Wt::AlignmentFlag::Right);
       leftMenu_->addItem("Information", make_unique<InfoWidget>(partitions_info));
-      leftMenu_->addItem("User Management", make_unique<UsersInfoWidget>(users_info,accounts_info));
-      leftMenu_->addItem("Account Management", make_unique<AccountsInfoWidget>(accounts_info, clusters_info));
-      leftMenu_->addItem("Job Management", make_unique<JobsInfoWidget>(jobs_info));
-      leftMenu_->addItem("Reservation Management", make_unique<ReservationsInfoWidget>(reservations_info));
+//      leftMenu_->addItem("User Management", make_unique<UsersInfoWidget>(users_info,accounts_info));
+//      leftMenu_->addItem("Account Management", make_unique<AccountsInfoWidget>(accounts_info, clusters_info));
+//      leftMenu_->addItem("Job Management", make_unique<JobsInfoWidget>(jobs_info));
+//      leftMenu_->addItem("Reservation Management", make_unique<ReservationsInfoWidget>(reservations_info));
 
+      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
       // refresh button
       auto refreshButton=rightMenu_->addItem("Refresh", make_unique<Wt::WPushButton>());
       refreshButton->clicked().connect(
 	      [=](){
                 this->update_data();
-		            rightMenu_->select(-1);
+		rightMenu_->select(-1);
 	      }
       );
       //Login-logout-button
       auto authWidget_up = make_unique<AuthWidget>();
       authWidget = authWidget_up.get();
+      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
       
       authWidget->add_observer( this );
       leftMenu_->addItem("Administration", std::move(authWidget_up));
@@ -79,10 +85,11 @@ RootApplication::RootApplication(const Wt::WEnvironment& env):Wt::WApplication(e
       logoutButton->clicked().connect(
           [=](){
             authWidget->logout();
-	          rightMenu_->select(-1);
+	    rightMenu_->select(-1);
           }
       );
       logoutButton->hide();
+      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
 
       // run data update at startup
       //update_data();
@@ -101,13 +108,25 @@ void RootApplication::update() {
     logoutButton->hide();
   }
 }
-
+//TODO: FIX ME!!
 void RootApplication::update_data() {
-  partitions_info->update_data();
-  accounts_info->update_data();
-  users_info->update_data(); 
-  clusters_info->update_data(); 
-  jobs_info->update_data();
-  reservations_info->update_data();
+  for( auto& o : observables ){
+    std::cout << "calling" << std::endl;
+    o->update_data();
+  }
+  
+//  partitions_info->update_data();
+//  accounts_info->update_data();
+//  users_info->update_data(); 
+//  clusters_info->update_data(); 
+//  jobs_info->update_data();
+//  reservations_info->update_data();
 }
 
+void RootApplication::add_updatable(Observable* _observable) {
+  observables.push_back(_observable);  
+}
+
+SlurmDB& RootApplication::get_slurm_db() {
+  return slurm_db;
+}

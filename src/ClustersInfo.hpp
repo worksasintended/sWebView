@@ -20,7 +20,7 @@ struct ClustersInfo : public Observable {
   
     }
 
-    void update_data();
+    virtual void update_data() override;
     size_t number_of_clusters();
     ClusterInfo& get_cluster( size_t idx );
 

@@ -4,6 +4,8 @@
 #include <slurm/slurm.h>
 #include <iostream>
 
+
+
 void PartitionsInfo::update_data(){
   if ( info ) {
     //clean up memory

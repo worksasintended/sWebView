@@ -7,6 +7,18 @@ SET (CMAKE_BUILD_TYPE DEBUG)
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread -g -fno-omit-frame-pointer" )
 SET( CMAKE_EXPORT_COMPILE_COMMANDS on )
 
+option( debug_login "deactivate login for debugging" on )
+option( enable_registration "enable registration of accounts" off )
+
+if ( debug_login ) 
+  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_DEBUG_BUILD=1 " )
+endif()
+
+if ( enable_registration )
+  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DENABLE_REGISTRATION=1 " )
+endif()
+
+
 # Other Libraries
 find_package( Boost COMPONENTS system thread signals)
 find_library( wt wt )
@@ -38,7 +50,7 @@ add_executable( slurm_gui
   JobInfo.cpp
   SlurmDB.cpp
   ReservationsInfoWidget.cpp
-  ReservationsInfoWidget.hpp
+  Observable.cpp
   model/Session.cpp 
   model/User.cpp
 )

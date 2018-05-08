@@ -1,5 +1,7 @@
+#pragma once
 
 #include <string>
+
 
 struct partition_info;
 typedef partition_info partition_info_t;
