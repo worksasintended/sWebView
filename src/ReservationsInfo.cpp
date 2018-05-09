@@ -31,7 +31,7 @@ size_t ReservationsInfo::number_of_reservations(){
 
 // one needs to throw an exeption if this is an out of bounds access
 ReservationInfo& ReservationsInfo::get_reservation( size_t idx ) {
-  if ( idx < 0 && idx >= reservation_info.size() ){
+  if ( idx >= reservation_info.size() ){
     throw std::out_of_range("reservation_info");
   }
   return reservation_info[idx];
