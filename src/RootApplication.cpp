@@ -51,6 +51,8 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
       auto rightMenu_ = navigation->addMenu(std::move(rightMenu), Wt::AlignmentFlag::Right);
       leftMenu_->addItem("Information", make_unique<InfoWidget>(partitions_info));
       
+      
+
       // refresh button
       auto refreshButton=rightMenu_->addItem("Refresh", make_unique<Wt::WPushButton>());
       refreshButton->clicked().connect(
@@ -63,8 +65,8 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
       auto authWidget_up = make_unique<AuthWidget>();
       authWidget = authWidget_up.get();
       
+      //TODO not working anymore!!!
       authWidget->add_observer( this );
-      
       leftMenu_->addItem("Administration", std::move(authWidget_up));
       logoutButton = rightMenu_->addItem("Logout", make_unique<Wt::WPushButton>());
       logoutButton->clicked().connect(
@@ -94,6 +96,7 @@ void RootApplication::update() {
 void RootApplication::update_data() {
   for( auto& o : observables ){
     o->update_data();
+    this->update(); //update state of logoutButton
   }
 }  
 
