@@ -9,7 +9,7 @@
 #include "Observable.hpp"
 #include "UsersInfo.hpp"
 #include "ReservationsInfo.hpp"
-
+#include <regex>
 #include <memory>
 
 class ReservationsInfoWidget : public Wt::WContainerWidget, public Observer{
@@ -20,5 +20,6 @@ public:
 
 private:
     std::shared_ptr<ReservationsInfo> reservations_info;
+    std::string search_regex_string;
 };
 
