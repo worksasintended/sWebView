@@ -18,7 +18,6 @@ using namespace Wt;
 ReservationsInfoWidget::ReservationsInfoWidget ( std::shared_ptr<ReservationsInfo> _reservations_info ){
   reservations_info = _reservations_info;
   reservations_info->add_observer(this);
-  //search_regex = std::regex search_regex("REGULAR EXPRESSIONS", std::regex_constants::grep | std::regex_constants::icase);
 
   this->update();
 }

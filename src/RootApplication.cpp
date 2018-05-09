@@ -37,7 +37,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
 
 
       partitions_info = make_shared<PartitionsInfo>();
-//      jobs_info = make_shared<JobsInfo>();
+      //jobs_info = make_shared<JobsInfo>();
 
       std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
       slurm_db.connect();
