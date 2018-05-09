@@ -26,14 +26,15 @@ AdminWidget::AdminWidget(){
   accounts_info = make_shared<AccountsInfo>(slurm_db);
   clusters_info = make_shared<ClustersInfo>(slurm_db);
   reservations_info = make_shared<ReservationsInfo>();
-
+  
+  //add border layout (use hbox instead? may help with dynamic sizeing)
   auto layout = this->setLayout( make_unique<WBorderLayout>());
 
   Wt::WStackedWidget *contentsStack = layout->addWidget( make_unique<Wt::WStackedWidget>(), Wt::LayoutPosition::Center);
   // add menu to the left
   Wt::WMenu *menu = layout->addWidget(make_unique<Wt::WMenu>(contentsStack), Wt::LayoutPosition::West);
   menu->setStyleClass("nav nav-pills nav-stacked");
-  menu->setWidth(150);
+  menu->setWidth(250);
 
   
   menu->addItem("User Management", make_unique<UsersInfoWidget>(users_info,accounts_info));
