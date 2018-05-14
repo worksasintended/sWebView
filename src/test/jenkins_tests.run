@@ -1,2 +1,4 @@
+sacctmgr add cluster linux
+
 ./bin_slurm_db_test -r junit > slurm_db.xml
 ./bin_users_info_test -r junit > users_info.xml
