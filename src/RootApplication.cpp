@@ -34,23 +34,16 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
       auto layout = root()->setLayout(make_unique<WBorderLayout>());
       auto container = layout->addWidget( make_unique<WContainerWidget>(), Wt::LayoutPosition::North );
       auto image = container->addWidget( make_unique<Wt::WImage>(Wt::WLink("banner.png")) );
+      container->setOverflow( Wt::Overflow::Scroll );
 
-
+      //connect to slurm and create PartitionsInfo instance
       partitions_info = make_shared<PartitionsInfo>();
       this->add_updatable( partitions_info.get() );
       //jobs_info = make_shared<JobsInfo>();
 
       std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
       slurm_db.connect();
-      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
-//    users_info = make_shared<UsersInfo>(slurm_db);
-//   accounts_info = make_shared<AccountsInfo>(slurm_db);
-//      clusters_info = make_shared<ClustersInfo>(slurm_db);
-//      reservations_info = make_shared<ReservationsInfo>();
 
-      container->setOverflow( Wt::Overflow::Scroll );
-
-      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
       //navigation bar
       auto navigation = container->addWidget(make_unique<Wt::WNavigationBar>());
       navigation->setResponsive(true);
@@ -67,12 +60,9 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
       std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
 
       leftMenu_->addItem("Information", make_unique<InfoWidget>(partitions_info));
-//      leftMenu_->addItem("User Management", make_unique<UsersInfoWidget>(users_info,accounts_info));
-//      leftMenu_->addItem("Account Management", make_unique<AccountsInfoWidget>(accounts_info, clusters_info));
-//      leftMenu_->addItem("Job Management", make_unique<JobsInfoWidget>(jobs_info));
-//      leftMenu_->addItem("Reservation Management", make_unique<ReservationsInfoWidget>(reservations_info));
+      
+      
 
-      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
       // refresh button
       auto refreshButton=rightMenu_->addItem("Refresh", make_unique<Wt::WPushButton>());
       refreshButton->clicked().connect(
@@ -84,8 +74,8 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
       //Login-logout-button
       auto authWidget_up = make_unique<AuthWidget>();
       authWidget = authWidget_up.get();
-      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
       
+      //TODO not working anymore!!!
       authWidget->add_observer( this );
       leftMenu_->addItem("Administration", std::move(authWidget_up));
       logoutButton = rightMenu_->addItem("Logout", make_unique<Wt::WPushButton>());
@@ -96,10 +86,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
           }
       );
       logoutButton->hide();
-      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
 
-      // run data update at startup
-      //update_data();
 }
 
 
@@ -107,7 +94,7 @@ RootApplication::~RootApplication() {
 
 }
 
-
+//hide / show logout button
 void RootApplication::update() {
   if ( authWidget->isLoggedIn() ) {
     logoutButton->show();
@@ -115,20 +102,14 @@ void RootApplication::update() {
     logoutButton->hide();
   }
 }
-//TODO: FIX ME!!
+//updating all data observables
 void RootApplication::update_data() {
   for( auto& o : observables ){
-    std::cout << "calling" << std::endl;
     o->update_data();
+    this->update(); //update state of logoutButton
   }
-  
-//  partitions_info->update_data();
-//  accounts_info->update_data();
-//  users_info->update_data(); 
-//  clusters_info->update_data(); 
-//  jobs_info->update_data();
-//  reservations_info->update_data();
-}
+}  
+
 
 void RootApplication::add_updatable(Observable* _observable) {
   observables.push_back(_observable);  

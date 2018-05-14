@@ -38,7 +38,7 @@ AdminWidget::AdminWidget(){
   // add menu to the left
   Wt::WMenu *menu = layout->addWidget(make_unique<Wt::WMenu>(contentsStack), Wt::LayoutPosition::West);
   menu->setStyleClass("nav nav-pills nav-stacked");
-  menu->setWidth(150);
+  menu->setWidth(250);
 
   
   menu->addItem("User Management", make_unique<UsersInfoWidget>(users_info,accounts_info));
