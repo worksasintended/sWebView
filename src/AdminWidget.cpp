@@ -27,6 +27,11 @@ AdminWidget::AdminWidget(){
   clusters_info = make_shared<ClustersInfo>(slurm_db);
   reservations_info = make_shared<ReservationsInfo>();
 
+  root_app->add_updatable( users_info.get() );
+  root_app->add_updatable( accounts_info.get() );
+  root_app->add_updatable( clusters_info.get() );
+  root_app->add_updatable( reservations_info.get() );
+
   auto layout = this->setLayout( make_unique<WBorderLayout>());
 
   Wt::WStackedWidget *contentsStack = layout->addWidget( make_unique<Wt::WStackedWidget>(), Wt::LayoutPosition::Center);

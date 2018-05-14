@@ -11,7 +11,9 @@ SlurmDB::SlurmDB (){
 }
 
 SlurmDB::~SlurmDB (){
-
+  if ( db_conn != 0 ) {
+    disconnect();
+  }
 }
 
 void 
@@ -26,11 +28,13 @@ SlurmDB::connect(){
     exit(-1);
   }
   std::cout << "slurmdb connection established" << std::endl;
+  connection_established = true;
 }
 
 void 
 SlurmDB::disconnect(){
   slurmdb_connection_close(&db_conn);
+  connection_established = false;
 }
 
 void SlurmDB::update() {
@@ -42,4 +46,8 @@ void SlurmDB::commit(bool commit) {
   if ( ret != SLURM_SUCCESS ) {
     std::cout << "could not commit to slurmdb" << std::endl;
   }
+}
+
+bool SlurmDB::is_connected() {
+  return connection_established; 
 }

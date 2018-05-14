@@ -16,6 +16,9 @@ public:
       return db_conn;
     }
 
+    bool is_connected();
+
 private:
     void* db_conn;
+    bool connection_established;
 };

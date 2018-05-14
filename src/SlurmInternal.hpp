@@ -22,6 +22,9 @@ T* slurm_malloc() {
   return (T*)xmalloc(sizeof(T));
 }
 
+inline auto to_slurm_str( const std::string& str ) {
+  return xstrdup(str.c_str());
+}
 
 inline int list_count(List l)
 {

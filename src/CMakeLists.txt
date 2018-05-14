@@ -50,10 +50,11 @@ add_executable( slurm_gui
   JobInfo.cpp
   SlurmDB.cpp
   ReservationsInfoWidget.cpp
-  Observable.cpp
   model/Session.cpp 
   model/User.cpp
 )
 
 target_link_libraries( slurm_gui wt wthttp wtdbosqlite3 wtdbo slurm slurmdb ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_SIGNALS_LIBRARY} )
 
+
+add_subdirectory( test )

@@ -37,6 +37,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
 
 
       partitions_info = make_shared<PartitionsInfo>();
+      this->add_updatable( partitions_info.get() );
       //jobs_info = make_shared<JobsInfo>();
 
       std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
@@ -51,14 +52,20 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
 
       std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
       //navigation bar
-      Wt::WNavigationBar *navigation = container->addWidget(make_unique<Wt::WNavigationBar>());
+      auto navigation = container->addWidget(make_unique<Wt::WNavigationBar>());
       navigation->setResponsive(true);
-      Wt::WStackedWidget *contentsStack = container->addWidget(Wt::cpp14::make_unique<Wt::WStackedWidget>());
+      std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
+
+      auto contentsStack = container->addWidget(make_unique<Wt::WStackedWidget>());
       contentsStack->addStyleClass("contents");
-      auto leftMenu = Wt::cpp14::make_unique<Wt::WMenu>(contentsStack);
+      std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
+
+      auto leftMenu = make_unique<Wt::WMenu>(contentsStack);
       auto leftMenu_ = navigation->addMenu(std::move(leftMenu));
-      auto rightMenu = Wt::cpp14::make_unique<Wt::WMenu>();
+      auto rightMenu = make_unique<Wt::WMenu>();
       auto rightMenu_ = navigation->addMenu(std::move(rightMenu), Wt::AlignmentFlag::Right);
+      std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
+
       leftMenu_->addItem("Information", make_unique<InfoWidget>(partitions_info));
 //      leftMenu_->addItem("User Management", make_unique<UsersInfoWidget>(users_info,accounts_info));
 //      leftMenu_->addItem("Account Management", make_unique<AccountsInfoWidget>(accounts_info, clusters_info));
@@ -128,5 +135,8 @@ void RootApplication::add_updatable(Observable* _observable) {
 }
 
 SlurmDB& RootApplication::get_slurm_db() {
+  if ( !slurm_db.is_connected() ) {
+    std::cout << "Warning: slurm_db is not connected" << std::endl;
+  }
   return slurm_db;
 }

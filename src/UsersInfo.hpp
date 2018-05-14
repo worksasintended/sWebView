@@ -24,6 +24,8 @@ struct UsersInfo : public Observable {
     UserInfo& get_users( size_t idx );
     void set_default_account( const UserInfo& user_info, std::string default_account );
     void add_to_account( const UserInfo& user_info, std::string account );
+    void add_user( std::string name, std::string account );
+    void remove_user( std::string name );
 
     void print();
 

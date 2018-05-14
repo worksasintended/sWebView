@@ -16,8 +16,6 @@ using namespace std;
 
 void UsersInfo::update_data(){
 
-  std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
-
   slurmdb_user_cond_t* conditions = 
     (slurmdb_user_cond_t*)xmalloc(sizeof(slurmdb_user_cond_t));
 
@@ -155,6 +153,60 @@ void UsersInfo::add_to_account( const UserInfo& user_info, std::string account )
 
   update_data();
 }
+
+void UsersInfo::add_user( std::string name, std::string account ){
+
+  auto user = slurm_malloc<slurmdb_user_rec_t>();
+  user->name = to_slurm_str(name);
+  auto user_list = slurm_list_create(slurmdb_destroy_user_rec);
+  slurm_list_append( user_list, user );
+
+  auto assoc = slurm_malloc<slurmdb_assoc_rec_t>();
+  slurmdb_init_assoc_rec(assoc, 0);
+
+  assoc->acct = to_slurm_str(account);
+  assoc->user = to_slurm_str(name);
+
+  // TODO have to wrap cluster to get information from this
+  assoc->cluster = xstrdup("linux");
+
+  slurmdb_users_add(slurm_db.get_connection(), user_list );
+
+  // important !!!!!!! commit all things you changed in this transaction
+  slurm_db.commit();
+
+  update_data();
+}
+
+void UsersInfo::remove_user( std::string name ){
+
+  auto user_cond = slurm_malloc<slurmdb_user_cond_t>();
+
+  user_cond->assoc_cond = slurm_malloc<slurmdb_assoc_cond_t>();
+  user_cond->assoc_cond->cluster_list = slurm_list_create(slurm_destroy_char);
+  /*
+   * FROM: sacctmgr user_functions.c
+   * We need this to make sure we only change users, not
+   * accounts if this list didn't exist it would change
+   * accounts. Having it blank is fine, it just needs to
+   * exist. 
+   */
+  user_cond->assoc_cond->user_list = slurm_list_create(slurm_destroy_char);
+
+  // specify the name
+  slurm_list_append( user_cond->assoc_cond->user_list, to_slurm_str(name) );
+
+  slurmdb_users_remove(slurm_db.get_connection(), user_cond );
+
+
+  // important !!!!!!! commit all things you changed in this transaction
+  slurm_db.commit();
+
+  update_data();
+}
+
+
+
 
 
 
