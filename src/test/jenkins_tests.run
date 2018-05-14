@@ -1,4 +1,5 @@
 yes | sacctmgr add cluster linux
+yes | sacctmgr add account example_account
 
 ./bin_slurm_db_test -r junit > slurm_db.xml
 ./bin_users_info_test -r junit > users_info.xml

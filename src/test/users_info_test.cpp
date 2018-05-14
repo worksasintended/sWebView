@@ -21,7 +21,7 @@ TEST_CASE( "UsersInfo add, find and remove user", "[UsersInfo]" ) {
 
   UsersInfo users_info(slurm_db);
 
-  users_info.add_user("example_user", "root" );
+  users_info.add_user("example_user", "example_account" );
 
   bool found = false;
   for( auto& user : users_info ){
