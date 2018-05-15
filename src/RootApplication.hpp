@@ -23,7 +23,7 @@ class RootApplication : public Wt::WApplication, public Observer{
 
     virtual void update() override;
 
-    void update_data();
+    void refresh();
   
     void add_updatable(Observable*);
 

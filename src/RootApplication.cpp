@@ -67,7 +67,7 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
       auto refreshButton=rightMenu_->addItem("Refresh", make_unique<Wt::WPushButton>());
       refreshButton->clicked().connect(
 	      [=](){
-                this->update_data();
+                this->refresh();
 		rightMenu_->select(-1);
 	      }
       );
@@ -86,7 +86,6 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
           }
       );
       logoutButton->hide();
-
 }
 
 
@@ -98,17 +97,19 @@ RootApplication::~RootApplication() {
 void RootApplication::update() {
   if ( authWidget->isLoggedIn() ) {
     logoutButton->show();
+    this->refresh();
   }else{
     logoutButton->hide();
   }
 }
 //updating all data observables
-void RootApplication::update_data() {
+void RootApplication::refresh() {
   for( auto& o : observables ){
     o->update_data();
-    this->update(); //update state of logoutButton
   }
-}  
+} 
+
+
 
 
 void RootApplication::add_updatable(Observable* _observable) {
