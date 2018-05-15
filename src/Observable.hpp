@@ -23,9 +23,7 @@ public:
     observers.erase(o);
   }
 
-  virtual void update_data(){
-
-  }
+  virtual void update_data() = 0;
 private:
   std::set<Observer*> observers;
 };
