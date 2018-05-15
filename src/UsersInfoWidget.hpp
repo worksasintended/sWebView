@@ -25,7 +25,7 @@ private:
 
     void make_add_dialog(Wt::WDialog* dialog, 
         std::vector<std::string> account_names, 
-        UserInfo& user_info);
+        UserInfo user_info);
 
     std::shared_ptr<UsersInfo> users_info;
     std::shared_ptr<AccountsInfo> accounts_info;

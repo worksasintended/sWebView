@@ -18,8 +18,7 @@ struct UserInfo {
     double get_fairshare();
 
   private:
-    struct Impl;
-    Impl* impl;
+    void* info;
     // cant do this with slurmdb_user_rec_t since it produces a conflicting declaration
     std::vector<AssociationInfo> associations;
 };

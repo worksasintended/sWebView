@@ -172,7 +172,7 @@ void UsersInfo::add_user( std::string name, std::string account ){
   assoc->user = to_slurm_str(name);
 
   // TODO have to wrap cluster to get information from this
-  assoc->cluster = xstrdup("linux");
+  assoc->cluster = to_slurm_str("linux");
 
   slurmdb_users_add(slurm_db.get_connection(), user_list );
 
@@ -191,6 +191,9 @@ void UsersInfo::remove_user( std::string name ){
 
   user_cond->assoc_cond = slurm_malloc<slurmdb_assoc_cond_t>();
   user_cond->assoc_cond->cluster_list = slurm_list_create(slurm_destroy_char);
+
+  slurm_list_append( user_cond->assoc_cond->cluster_list, to_slurm_str("linux") );
+
   /*
    * FROM: sacctmgr user_functions.c
    * We need this to make sure we only change users, not

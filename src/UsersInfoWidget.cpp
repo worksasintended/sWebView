@@ -67,7 +67,7 @@ void UsersInfoWidget::make_move_dialog(
 void UsersInfoWidget::make_add_dialog(
     WDialog* dialog, 
     std::vector<std::string> account_names, 
-    UserInfo& user_info 
+    UserInfo user_info 
 ){
   auto con = dialog->contents()->addWidget(make_unique<WContainerWidget>());
 
@@ -78,11 +78,12 @@ void UsersInfoWidget::make_add_dialog(
   }
 
   auto cancel_button = con->addWidget(make_unique<WPushButton>( "cancel" ) );
-  cancel_button->clicked().connect([=] {
+  cancel_button->clicked().connect([=](){
     dialog->reject();
   });
   auto ok_button = con->addWidget(make_unique<WPushButton>( "ok" ) );
-  ok_button->clicked().connect([=] {
+  ok_button->clicked().connect([=](){
+#if 1
     try{
       users_info->add_to_account( user_info, cb->valueText().toUTF8() );
     }catch ( std::invalid_argument& ia ) {
@@ -99,6 +100,7 @@ void UsersInfoWidget::make_add_dialog(
       );
     }
     dialog->accept();
+#endif
   });
 }
 
@@ -144,7 +146,7 @@ void UsersInfoWidget::update(){
         auto add_button = button.get();
         user->setColumnWidget( ctr++ , std::move(button) );
         add_button->clicked().connect(
-          [=,&user_info](){
+          [=](){
             auto dialog = this->addChild(
                 make_unique<Wt::WDialog>("Add "s + user_info.get_name() + " to account")
             );

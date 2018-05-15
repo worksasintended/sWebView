@@ -56,7 +56,7 @@ size_t ClustersInfo::number_of_clusters(){
 }
 
 ClusterInfo& ClustersInfo::get_cluster( size_t idx ) {
-  if ( idx < 0 && idx >= clusters_info.size() ){
+  if ( idx >= clusters_info.size() ){
     throw std::out_of_range("clusters_info");
   }
   return clusters_info[idx];

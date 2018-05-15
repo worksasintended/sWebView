@@ -9,13 +9,6 @@
 
 using namespace std;
 
-struct UserInfo::Impl{
-  Impl( slurmdb_user_rec_t* _user ){
-    user = _user;
-  }
-  slurmdb_user_rec_t* user;
-};
-
 UserInfo::UserInfo( void* _info ) {
 
   if ( _info == nullptr ) {
@@ -23,25 +16,24 @@ UserInfo::UserInfo( void* _info ) {
     exit(EXIT_FAILURE);
   }
 
-  impl = new UserInfo::Impl((slurmdb_user_rec_t*)_info);
+  info = _info;
 
-  for_all<slurmdb_assoc_rec_t>( impl->user->assoc_list, [&]( auto assoc_rec ){ 
+  for_all<slurmdb_assoc_rec_t>( ((slurmdb_user_rec_t*)info)->assoc_list, [&]( auto assoc_rec ){ 
     associations.emplace_back( assoc_rec );
   });
 
 }
 
 UserInfo::~UserInfo(){
-  delete impl;
 }
 
 std::string UserInfo::get_name() const{
-  if ( impl->user->name == nullptr ) return "no name";
-  return impl->user->name;
+  if ( ((slurmdb_user_rec_t*)info)->name == nullptr ) return "no name";
+  return ((slurmdb_user_rec_t*)info)->name;
 }
 
 bool UserInfo::is_in_account( std::string account_name ) const{
-  auto user = impl->user;;
+  auto user = ((slurmdb_user_rec_t*)info);
   bool is = false;
 
   if ( !user->assoc_list ) {
@@ -69,7 +61,7 @@ bool UserInfo::is_in_account( std::string account_name ) const{
 std::vector<std::string> UserInfo::get_account_names() const {
   std::vector<std::string> ret;
 
-  auto user = impl->user;
+  auto user = ((slurmdb_user_rec_t*)info);
 
   for_all<slurmdb_assoc_rec_t>( user->assoc_list, [&](slurmdb_assoc_rec_t* association){ 
     ret.emplace_back( association->acct );
