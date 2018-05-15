@@ -124,6 +124,8 @@ void UsersInfo::set_default_account( const UserInfo& user_info, std::string defa
 // TODO check wether this is nessecary 
 void UsersInfo::add_to_account( const UserInfo& user_info, std::string account ){
 
+  slurm_db.update();
+
   auto user = slurm_malloc<slurmdb_user_rec_t>();
   auto assoc = slurm_malloc<slurmdb_assoc_rec_t>();
   slurmdb_init_assoc_rec(assoc, 0);
@@ -156,6 +158,8 @@ void UsersInfo::add_to_account( const UserInfo& user_info, std::string account )
 
 void UsersInfo::add_user( std::string name, std::string account ){
 
+  slurm_db.update();
+
   auto user = slurm_malloc<slurmdb_user_rec_t>();
   user->name = to_slurm_str(name);
   auto user_list = slurm_list_create(slurmdb_destroy_user_rec);
@@ -179,6 +183,9 @@ void UsersInfo::add_user( std::string name, std::string account ){
 }
 
 void UsersInfo::remove_user( std::string name ){
+
+
+  slurm_db.update();
 
   auto user_cond = slurm_malloc<slurmdb_user_cond_t>();
 
