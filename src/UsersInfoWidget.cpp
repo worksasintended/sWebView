@@ -110,6 +110,7 @@ void UsersInfoWidget::update(){
 
   // TODO someone has to change the style of this table 
   // buttons made of icons or something like this
+  // NOTE: I would actually prefer to make the names popub menu buttons, so you can click on the name and a dialog shows add and default. The way it is now, it is really hard to click the corresponding buttons to a given name. 
   auto tree_table = this->addWidget( make_unique<WTreeTable>() );
   tree_table->setTreeRoot( make_unique<WTreeTableNode>("root"), "Accounts" );
   auto root = tree_table->treeRoot();
@@ -139,7 +140,7 @@ void UsersInfoWidget::update(){
       auto node = make_unique<WTreeTableNode>(user_info.get_name()); 
       auto user = node.get();
       account->addChildNode( std::move(node) );  
-      int ctr = 1;
+      int ctr = 2; // 1 is already taken!
 
       {
         auto button = make_unique<WPushButton>("add");
