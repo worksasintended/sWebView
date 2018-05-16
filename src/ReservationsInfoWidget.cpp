@@ -30,7 +30,9 @@ ReservationsInfoWidget::~ReservationsInfoWidget()  {
 void ReservationsInfoWidget::update(){
   this->clear();  
   auto search_field = this->addWidget( make_unique<WLineEdit>() );
-  search_field->changed().connect( [=](){
+  /* Implements sort of life-search "Unlike the changed() signal, the signal is fired on every change, not only when the focus is lost. 
+  Unlike the keyPressed() signal, this signal is fired also for other events that change the text, such as paste actions." */
+  search_field->textInput().connect( [=](){
       this->search_regex_string = search_field->text().toUTF8();
       this->update();    
     }
