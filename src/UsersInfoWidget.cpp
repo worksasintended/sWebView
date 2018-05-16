@@ -6,6 +6,7 @@
 #include <Wt/WPushButton.h>
 #include <Wt/WDialog.h>
 #include <Wt/WComboBox.h>
+#include <Wt/WPopupMenu.h>
 
 #include "StandardDialogs.hpp"
 
@@ -141,11 +142,15 @@ void UsersInfoWidget::update(){
       auto user = node.get();
       account->addChildNode( std::move(node) );  
       int ctr = 2; // 1 is already taken!
+      
 
+      auto popup = make_unique<Wt::WPopupMenu>();
+      auto drop_button = make_unique<Wt::WPushButton>("edit "+user_info.get_name() );
+
+      popup->addItem( "choose an action for user " + user_info.get_name() );
+      popup->addSeparator();
       {
-        auto button = make_unique<WPushButton>("add");
-        auto add_button = button.get();
-        user->setColumnWidget( ctr++ , std::move(button) );
+	auto add_button = popup->addItem("add account",  make_unique<WPushButton>() );
         add_button->clicked().connect(
           [=](){
             auto dialog = this->addChild(
@@ -167,9 +172,7 @@ void UsersInfoWidget::update(){
       }
 
       {
-        auto button = make_unique<WPushButton>("default");
-        auto move_button = button.get();
-        user->setColumnWidget( ctr++ , std::move(button) );
+	auto move_button = popup->addItem("set default account",  make_unique<WPushButton>() );
         move_button->clicked().connect(
           [=,&user_info](){
             auto dialog = this->addChild(
@@ -190,6 +193,9 @@ void UsersInfoWidget::update(){
         );
       }
 
+      drop_button->setMenu( move(popup) );
+
+      user->setColumnWidget( ctr++, std::move(drop_button) );
     }
 
   }
