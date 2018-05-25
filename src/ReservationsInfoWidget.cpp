@@ -8,6 +8,7 @@
 #include <Wt/WPushButton.h>
 #include <Wt/WDialog.h>
 #include <Wt/WComboBox.h>
+#include <Wt/WTemplate.h>
 #include <regex>
 
 #include "StandardDialogs.hpp"
@@ -29,14 +30,22 @@ ReservationsInfoWidget::~ReservationsInfoWidget()  {
 
 void ReservationsInfoWidget::update(){
   this->clear();  
-  auto search_field = this->addWidget( make_unique<WLineEdit>() );
-  /* Implements sort of life-search "Unlike the changed() signal, the signal is fired on every change, not only when the focus is lost. 
-  Unlike the keyPressed() signal, this signal is fired also for other events that change the text, such as paste actions." */
-  search_field->textInput().connect( [=](){
-      this->search_regex_string = search_field->text().toUTF8();
+
+  auto result = this->addWidget(make_unique<Wt::WTemplate>(Wt::WString::tr("simpleForm-template")));
+
+  auto search_field = make_unique<WLineEdit>( search_regex_string );
+  auto search_field_ptr = search_field.get();
+  search_field->changed().connect( [=](){
+      this->search_regex_string = search_field_ptr->text().toUTF8();
       this->update();    
     }
   );
+
+  result->bindWidget("name", std::move(search_field) );
+
+  auto button = make_unique<WPushButton>("search");
+
+  result->bindWidget("button", std::move(button) );
 
   // TODO someone has to change the style of this table 
   // buttons made of icons or something like this

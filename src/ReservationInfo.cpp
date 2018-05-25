@@ -2,6 +2,7 @@
 #include "ReservationInfo.hpp"
 #include <ctime>
 #include <slurm/slurm.h>
+#include "SlurmInternal.hpp"
 
 ReservationInfo::ReservationInfo( reserve_info_t* _info ) {
   info = _info; 
@@ -10,7 +11,7 @@ ReservationInfo::ReservationInfo( reserve_info_t* _info ) {
 
 
 std::string ReservationInfo::get_name(){
-  return info->name;
+  return to_str(info->name);
 }
 
 std::string ReservationInfo::get_start_time_string(){
@@ -30,5 +31,5 @@ std::string ReservationInfo::get_end_time_string(){
   return end_time_string;
 }
 std::string ReservationInfo::get_users(){
-	return info->users;
+	return to_str(info->users);
 }

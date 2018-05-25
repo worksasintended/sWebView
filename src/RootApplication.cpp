@@ -31,6 +31,9 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
       bootstrapTheme->setResponsive(true);
       setTheme(bootstrapTheme);
       useStyleSheet("resources/themes/bootstrap/3/bootstrap-theme.min.css");
+
+      messageResourceBundle().use(appRoot() + "text");
+
       auto layout = root()->setLayout(make_unique<WBorderLayout>());
       auto container = layout->addWidget( make_unique<WContainerWidget>(), Wt::LayoutPosition::North );
       auto image = container->addWidget( make_unique<Wt::WImage>(Wt::WLink("banner.png")) );

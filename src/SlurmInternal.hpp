@@ -54,3 +54,11 @@ inline void for_all( List l, U f ) {
   }
   slurm_list_iterator_destroy(it);
 }
+
+inline std::string to_str( const char* s ){
+	if ( s == nullptr ) {
+		return "empty";
+	}else{
+		return s;
+	}
+}
