@@ -31,7 +31,7 @@ ReservationsInfoWidget::~ReservationsInfoWidget()  {
 void ReservationsInfoWidget::update(){
   this->clear();  
 
-  auto result = this->addWidget(make_unique<Wt::WTemplate>(Wt::WString::tr("simpleForm-template")));
+  auto result = this->addWidget(make_unique<Wt::WTemplate>(Wt::WString::tr("customForm-template")));
 
   auto search_field = make_unique<WLineEdit>( search_regex_string );
   auto search_field_ptr = search_field.get();

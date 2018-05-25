@@ -1,0 +1,7 @@
+/sWebView/src/CMakeFiles/rebuild_cache.dir
+/sWebView/src/CMakeFiles/edit_cache.dir
+/sWebView/src/CMakeFiles/slurm_gui.dir
+/sWebView/src/test/CMakeFiles/rebuild_cache.dir
+/sWebView/src/test/CMakeFiles/bin_users_info_test.dir
+/sWebView/src/test/CMakeFiles/edit_cache.dir
+/sWebView/src/test/CMakeFiles/bin_slurm_db_test.dir
