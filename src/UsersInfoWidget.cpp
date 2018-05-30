@@ -1,5 +1,4 @@
-
-
+#include "string"
 #include "UsersInfoWidget.hpp"
 #include <Wt/WTreeTable.h>
 #include <Wt/WTreeTableNode.h>
@@ -141,12 +140,17 @@ void UsersInfoWidget::update(){
       auto node = make_unique<WTreeTableNode>(user_info.get_name()); 
       auto user = node.get();
       account->addChildNode( std::move(node) );  
-      int ctr = 2; // 1 is already taken!
-      
+      int ctr = 1;
 
       auto popup = make_unique<Wt::WPopupMenu>();
-      auto drop_button = make_unique<Wt::WPushButton>("edit "+user_info.get_name() );
+      std::string button_text= "edit "+user_info.get_name();
+      button_text.insert(button_text.begin(),(25 - button_text.length()), ' ');
 
+      //std::cout << button_text << std::endl;
+      auto drop_button = make_unique<Wt::WPushButton>( button_text );
+
+      //drop_button->setMinimumSize( Wt::WLength(99999999999, LengthUnit::Pixel), Wt::WLength(100, LengthUnit::Pixel) );
+      
       popup->addItem( "choose an action for user " + user_info.get_name() );
       popup->addSeparator();
       {
