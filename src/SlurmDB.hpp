@@ -6,6 +6,8 @@ class SlurmDB {
 public:
     SlurmDB (); 
     virtual ~SlurmDB ();
+    SlurmDB( const SlurmDB& ) = delete; // non construction-copyable
+    SlurmDB& operator=( const SlurmDB& ) = delete; // non copyable
 
     void connect();
     void disconnect();

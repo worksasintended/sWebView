@@ -34,11 +34,5 @@ class RootApplication : public Wt::WApplication, public Observer{
     Wt::WMenuItem* logoutButton=nullptr;
     std::shared_ptr<PartitionsInfo> partitions_info;
     std::vector<Observable*> observables;
-  
-//    std::shared_ptr<UsersInfo> users_info;
-//    std::shared_ptr<AccountsInfo> accounts_info;
-//    std::shared_ptr<ClustersInfo> clusters_info;
-//    std::shared_ptr<JobsInfo> jobs_info;
-//    std::shared_ptr<ReservationsInfo> reservations_info;
     SlurmDB slurm_db;
 };

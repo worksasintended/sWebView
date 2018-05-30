@@ -42,25 +42,20 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
       //connect to slurm and create PartitionsInfo instance
       partitions_info = make_shared<PartitionsInfo>();
       this->add_updatable( partitions_info.get() );
-      //jobs_info = make_shared<JobsInfo>();
 
-      std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
       slurm_db.connect();
 
       //navigation bar
       auto navigation = container->addWidget(make_unique<Wt::WNavigationBar>());
       navigation->setResponsive(true);
-      std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
 
       auto contentsStack = container->addWidget(make_unique<Wt::WStackedWidget>());
       contentsStack->addStyleClass("contents");
-      std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
 
       auto leftMenu = make_unique<Wt::WMenu>(contentsStack);
       auto leftMenu_ = navigation->addMenu(std::move(leftMenu));
       auto rightMenu = make_unique<Wt::WMenu>();
       auto rightMenu_ = navigation->addMenu(std::move(rightMenu), Wt::AlignmentFlag::Right);
-      std::cout << __PRETTY_FUNCTION__ << " " << __FILE__ << " " << __LINE__ << std::endl;
 
       leftMenu_->addItem("Information", make_unique<InfoWidget>(partitions_info));
       
@@ -78,7 +73,6 @@ RootApplication::RootApplication(const Wt::WEnvironment& env) :
       auto authWidget_up = make_unique<AuthWidget>();
       authWidget = authWidget_up.get();
       
-      //TODO not working anymore!!!
       authWidget->add_observer( this );
       leftMenu_->addItem("Administration", std::move(authWidget_up));
       logoutButton = rightMenu_->addItem("Logout", make_unique<Wt::WPushButton>());

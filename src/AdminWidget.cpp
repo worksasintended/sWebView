@@ -18,7 +18,8 @@ using namespace Wt;
 AdminWidget::AdminWidget(){
 
   auto instance = WApplication::instance();
-  auto root_app = (RootApplication*)instance;  auto slurm_db = root_app->get_slurm_db();
+  auto root_app = (RootApplication*)instance;  
+  auto& slurm_db = root_app->get_slurm_db();
 
   jobs_info = make_shared<JobsInfo>();
 
@@ -43,11 +44,8 @@ AdminWidget::AdminWidget(){
   
   menu->addItem("User Management", make_unique<UsersInfoWidget>(users_info,accounts_info));
   menu->addItem("Account Management", make_unique<AccountsInfoWidget>(accounts_info, clusters_info));
-#if 1
   menu->addItem("Job Management", make_unique<JobsInfoWidget>(jobs_info));
-#endif
   menu->addItem("Reservation Management", make_unique<ReservationsInfoWidget>(reservations_info));
-  std::cout << __FILE__ << " " << __LINE__ << " " << __PRETTY_FUNCTION__ << std::endl;
 }
 
 
