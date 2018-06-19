@@ -38,7 +38,7 @@ ReservationInfo& ReservationsInfo::get_reservation( size_t idx ) {
 }
 
 
-void ReservationsInfo::create_reservation(){
+void ReservationsInfo::create_reservation(int number_of_hours){
   unique_ptr<resv_desc_msg_t> desc_msg( new resv_desc_msg_t ); // we own the struct so we need to destroy it
 
   slurm_init_resv_desc_msg( desc_msg.get() ); // initialize with defaults
@@ -68,7 +68,7 @@ void ReservationsInfo::create_reservation(){
   // all other values have to be obtained from the user interface
   desc_msg->start_time = std::chrono::system_clock::to_time_t(std::chrono::high_resolution_clock::now());
   desc_msg->accounts = xstrdup("root");
-  desc_msg->end_time = std::chrono::system_clock::to_time_t(std::chrono::high_resolution_clock::now() + std::chrono::hours(24));
+  desc_msg->end_time = std::chrono::system_clock::to_time_t(std::chrono::high_resolution_clock::now() + std::chrono::hours(number_of_hours));
 
   slurm_create_reservation(desc_msg.get());
   // changed the underlying data model so an update is needed 

@@ -75,5 +75,31 @@ void ReservationsInfoWidget::update(){
     counter++;
 
   }
+  void ReservationsInfoWidget::make_add_dialog (WDialog* dialog){
+
+    dialog->setWindowTitle( "Add Reservation");
+    auto con = dialog->contents()->addWidget(make_unique<WContainerWidget>());
+    auto numberOfHours = con->addWidget( make_unique<WLineEdit>(""));
+    auto cancel_button = con->addWidget(make_unique<WPushButton>( "cancel" ) );
+    cancel_button->clicked().connect([=] {
+     dialog->reject();
+    });
+    auto ok_button = con->addWidget(make_unique<WPushButton>( "ok" ) );
+    ok_button->clicked().connect([=] {
+     if ( numberOfHours->text() != "") {
+      try{
+      reservations_info->create_reservation(
+          numberOfHours->text().toint()
+      );
+      }catch( std::string& e ) {
+        auto error_dialog = make_modal_dialog( dialog->parent() ); 
+        make_error_dialog( error_dialog, e );
+        error_dialog->show();
+      }
+    }
+    dialog->accept();
+  });
+
+  }
 
 }
