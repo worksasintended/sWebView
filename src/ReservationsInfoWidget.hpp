@@ -19,6 +19,7 @@ public:
     void update() override;
 
 private:
+    void make_add_dialog (Wt::WDialog* dialog);
     std::shared_ptr<ReservationsInfo> reservations_info;
     std::string search_regex_string;
 };

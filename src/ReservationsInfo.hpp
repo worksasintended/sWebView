@@ -20,7 +20,7 @@ struct ReservationsInfo : public Observable {
 
     void create_reservation();
     void update_reservation(std::string name);
-    void create_reservation(int number_of_hours)
+    void create_reservation(int number_of_hours);
 
     auto begin(){
       return reservation_info.begin();

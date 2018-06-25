@@ -9,6 +9,7 @@
 #include <Wt/WDialog.h>
 #include <Wt/WComboBox.h>
 #include <Wt/WTemplate.h>
+#include <Wt/WString.h>
 #include <regex>
 
 #include "StandardDialogs.hpp"
@@ -29,7 +30,20 @@ ReservationsInfoWidget::~ReservationsInfoWidget()  {
 
 
 void ReservationsInfoWidget::update(){
-  this->clear();  
+  this->clear();
+  auto add_button =  this->addWidget( make_unique<WPushButton>("+") );
+
+  add_button->clicked().connect(
+    [=](){
+      auto dialog = make_modal_dialog(this);
+      make_add_dialog( dialog );
+      try{
+  dialog->show();
+      }catch( std::exception& e ) {
+  e.what();
+      }
+    }
+  );
 
   auto result = this->addWidget(make_unique<Wt::WTemplate>(Wt::WString::tr("customForm-template")));
 
@@ -75,7 +89,10 @@ void ReservationsInfoWidget::update(){
     counter++;
 
   }
-  void ReservationsInfoWidget::make_add_dialog (WDialog* dialog){
+  
+
+}
+void ReservationsInfoWidget::make_add_dialog (WDialog* dialog){
 
     dialog->setWindowTitle( "Add Reservation");
     auto con = dialog->contents()->addWidget(make_unique<WContainerWidget>());
@@ -88,9 +105,10 @@ void ReservationsInfoWidget::update(){
     ok_button->clicked().connect([=] {
      if ( numberOfHours->text() != "") {
       try{
-      reservations_info->create_reservation(
-          numberOfHours->text().toint()
-      );
+        Wt::WString wthourstring = numberOfHours->text();
+        std::string stdhourstring = wthourstring.toUTF8();
+        int hourint = std::stoi(stdhourstring);
+        reservations_info->create_reservation(hourint);
       }catch( std::string& e ) {
         auto error_dialog = make_modal_dialog( dialog->parent() ); 
         make_error_dialog( error_dialog, e );
@@ -101,5 +119,3 @@ void ReservationsInfoWidget::update(){
   });
 
   }
-
-}
