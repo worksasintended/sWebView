@@ -1,5 +1,5 @@
 #include <Wt/WMenu.h>
-#include <Wt/WTextArea>
+#include <Wt/WTextArea.h>
 #include <Wt/WText.h>
 #include "AdminWidget.hpp"
 #include "RootApplication.hpp"

@@ -2,7 +2,7 @@
 #pragma once
 
 
-#include <Wt/WContainerWidget>
+#include <Wt/WContainerWidget.h>
 #include <Wt/WTreeTable.h>
 
 #include "Observable.hpp"
